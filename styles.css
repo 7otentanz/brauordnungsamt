@@ -1,0 +1,17 @@
+/*  
+    CI - Farben
+    lila        -   #ff00ff
+    hellblau    -   #00ffff
+*/
+
+* {
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.233);
+}
+
+.logo {
+    margin-top: 0.2%;
+    margin-left: 0.2%;
+    width: 10%;
+    background: transparent;
+}
