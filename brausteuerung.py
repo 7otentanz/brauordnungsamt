@@ -17,10 +17,11 @@ class Rezept:
 ### Anschließend wird die Brausteuerung (Im Sinne von Hardware) zusammengestellt und initialisiert.###
 ### Hier wird ausschließlich Hardware angesteuert und ausgelesen, Zeitsteurung findet erst im Brauvorgang statt! ###
 class Brausteuerung:
-    def __init__(self, heizpin, ruehrpin, temperaturpin):
+    def __init__(self, heizpin, ruehrpin, temperaturpin, status):
         self.heizpin = heizpin
         self.ruehrpin = ruehrpin
         self.temperaturpin = temperaturpin
+        self.status = status
         
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.heizpin, GPIO.OUT)
@@ -44,6 +45,19 @@ class Brausteuerung:
     def temperatur(self):
         #GPIO für temperatur ansprechen
         pass
+
+    def statusAnzeigen(self):
+        displaytext = self.status
+        # Hier dann der Code um den Text auf dem Display anzuzeigen
+        pass
+
+    def statusAendern(self, status):
+        self.status = status
+        self.statusAnzeigen()
+        # Benachrichtigung, wenn sich der Status ändert - auch die einzelnen Rasten
+        # Status auf Maischplan ändern mit Klick auf Startbutton oder so?
+        # während des Fahrens der Rasten: "Temperatur und Restzeit"
+        # Kochen: "Kochen und Restzeit"
 
 ### Hier findet unter Verwendung des Rezepts und der Hardware die Initialisierung des Brauprozesses statt. ###
 ### An dieser Stelle wird der Brauprozess gestartet, zeitgesteuert und getrackt. ###
@@ -78,12 +92,8 @@ class Brauvorgang:
         # eigentlichen Brauvorgang beginnen
         self.beginn = datetime.now()
         self.ende = self.beginn + timedelta(minutes=(self.rezept.dauer))
-        self.statusAendern("Erste Rast beginnt.")
+        self.hardware.statusAendern("Erste Rast beginnt.")
         self.maischen()
-
-    def statusAnzeigen(self):
-        # Hier eine Funktion, die den aktuellen Status des Prozesses auf dem Display anzeigt
-        pass
 
     def maischen(self):
         for sollTemperatur, dauer in self.rezept.maischplan.items():
@@ -109,18 +119,40 @@ class Brauvorgang:
                     self.hardware.heizenAUS()
                     break
                 
-                self.statusAendern(f"{sollTemperatur}°C, Restzeit {restzeit} Minuten")
+                self.hardware.statusAendern(f"{sollTemperatur}°C, Restzeit {restzeit} Minuten")
                 time.sleep(25)
 
         self.hardware.heizenAUS()
+        ### Koch dann auf Knopfdruck wieder starte?? Hier Pause fürs Läutern!###
+    
+    def kochen(self):
+        self.hardware.heizenAN()
+        kochzeit = self.rezept.kochzeit
+        self.hardware.statusAendern(f"Kochen: {kochzeit} Minuten")
 
-    def statusAendern(self, status):
-        self.status = status
-        # Benachrichtigung, wenn sich der Status ändert - auch die einzelnen Rasten
-        # Status auf Maischplan ändern mit Klick auf Startbutton oder so?
-        # während des Fahrens der Rasten: "Temperatur und Restzeit"
-        # Kochen: "Kochen und Restzeit"
-        pass
+        start = datetime.now()
+        ende= start + timedelta(minutes=kochzeit)
+
+        while datetime.now() < ende:
+            verbleibend = (ende - datetime.now()).seconds // 60
+
+            for eineHopfengabe in self.rezept.hopfengaben["hopfengaben"]:
+                if eineHopfengabe["zeit"] == verbleibend:
+                    ### Benachrichtigung per Mail ###
+                    pass
+
+            self.hardware.statusAendern(f"Kochen: {verbleibend} Minuten")            
+            time.sleep(25)
+        
+        self.hardware.heizenAUS()
+        ### Benachrichtigung: Kann gekühlt werden, Vorgang beendet ###
+        self.hardware.statusAendern("Brauvorgang abgeschlossen!")
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,1 @@
+KW 16:  Brausteuerung erweitert um die Pinbelegung des Raspberry sowie Sicherstellen des tatsächlichen Prozesses.
