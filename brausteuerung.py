@@ -1,43 +1,88 @@
-from datetime import datetime, timedelta, time
+from datetime import datetime, timedelta
+import time
+import RPi.GPIO as GPIO
 
+### Zuerst muss das Rezept mit allen Notwendigen Parametern zusammengestellt und initialisiert werden. ###
 class Rezept:
     def __init__(self, name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe):
         self.name = name
         self.schuettung = schuettung
         self.maischplan = maischplan
         self.kochzeit = kochzeit
+        self.dauer = sum(self.maischplan.values()) + self.kochzeit
         self.hopfengaben = hopfengaben
         self.anstelltemperatur = anstelltemperatur
         self.hefe = hefe
 
+### Anschließend wird die Brausteuerung (Im Sinne von Hardware) zusammengestellt und initialisiert.###
+### Hier wird ausschließlich Hardware angesteuert und ausgelesen, Zeitsteurung findet erst im Brauvorgang statt! ###
+class Brausteuerung:
+    def __init__(self, heizpin, ruehrpin, temperaturpin):
+        self.heizpin = heizpin
+        self.ruehrpin = ruehrpin
+        self.temperaturpin = temperaturpin
+        
+        GPIO.setmode(GPIO.BCM)
+        GPIO.setup(self.heizpin, GPIO.OUT)
+        GPIO.output(self.heizpin, GPIO.LOW)
+        GPIO.setup(self.ruehrpin, GPIO.OUT)
+        GPIO.output(self.ruehrpin, GPIO.LOW)
+        # Temperaturpin noch zu belegen und zu programmieren
+
+    def heizenAN(self):
+        GPIO.output(self.heizpin, GPIO.HIGH)
+
+    def heizenAUS(self):
+        GPIO.output(self.heizpin, GPIO.LOW)
+
+    def ruehrenAN(self):
+        GPIO.output(self.ruehrpin, GPIO.HIGH)
+
+    def ruehrenAUS(self):
+        GPIO.output(self.ruehrpin, GPIO.LOW)
+
+    def temperatur(self):
+        #GPIO für temperatur ansprechen
+        pass
+
+### Hier findet unter Verwendung des Rezepts und der Hardware die Initialisierung des Brauprozesses statt. ###
+### An dieser Stelle wird der Brauprozess gestartet, zeitgesteuert und getrackt. ###
 class Brauvorgang:
     def __init__(self, rezept, hardware):
         self.rezept = rezept
         self.hardware = hardware
-        self.beginn = "DatetimeObjekt"
-        self.ende = "DatetimeObjekt"
+        self.beginn = "beginn"
+        self.ende = "ende"
         self.status = "Einmaischen"
 
     def einmaischenVorbereiten(self):
-        # hardware.aufheizen mit temperatur von Rast [0], ohne Zeit
-        pass
+        self.einmaischtemperaturHalten = True
+        benachrichtigt = False
+        while self.einmaischtemperaturHalten:
+            istTemperatur = self.hardware.temperatur()
+            if istTemperatur < 59.5:
+                self.hardware.heizenAN()
+            else:
+                self.hardware.heizenAUS()
+                # Wenn das este mal die Einmaischtemperatur erreicht ist wird das Rührwerk eingeschalten und eine Benachrichtigung gesendet.
+                if benachrichtigt == False:
+                    ### Benachrichtung per Mail?###
+                    self.hardware.ruehrenAN()
+                    benachrichtigt = True
+            time.sleep(25)
 
     def brauvorgangStarten(self):
-        # Starten mit Klick auf Button, nach dem Einmaischen!
+        # einmaischenVorbereiten zuerst beenden
+        self.einmaischtemperaturHalten = False
+        time.sleep(25)
+        # eigentlichen Brauvorgang beginnen
         self.beginn = datetime.now()
-        self.ende = self.beginn + timedelta(minutes=self.rezept.kochzeit + sum(self.rezept.maischplan.values()))
-        self.maischen() # sollte dann den Maischvorgang starten
+        self.ende = self.beginn + timedelta(minutes=(self.rezept.dauer))
+        self.statusAendern("Erste Rast beginnt.")
+        self.maischen()
 
     def statusAnzeigen(self):
         # Hier eine Funktion, die den aktuellen Status des Prozesses auf dem Display anzeigt
-        pass
-
-    def statusAendern(self, status):
-        self.status = status
-        # Benachrichtigung, wenn sich der Status ändert - auch die einzelnen Rasten
-        # Status auf Maischplan ändern mit Klick auf Startbutton oder so?
-        # während des Fahrens der Rasten: "Temperatur und Restzeit"
-        # Kochen: "Kochen und Restzeit"
         pass
 
     def maischen(self):
@@ -69,32 +114,14 @@ class Brauvorgang:
 
         self.hardware.heizenAUS()
 
-class Brausteuerung:
-    def __init__(self, heizpin, ruehrpin, temperaturpin):
-        self.heizpin = heizpin
-        self.ruehrpin = ruehrpin
-        self.temperaturpin = temperaturpin
-        # GPIOs irgendwie festlegen und so
-
-    def heizenAN(self):
-        #GPIO fürs heizen ansprechen
+    def statusAendern(self, status):
+        self.status = status
+        # Benachrichtigung, wenn sich der Status ändert - auch die einzelnen Rasten
+        # Status auf Maischplan ändern mit Klick auf Startbutton oder so?
+        # während des Fahrens der Rasten: "Temperatur und Restzeit"
+        # Kochen: "Kochen und Restzeit"
         pass
 
-    def heizenAUS(self):
-        #GPIO fürs heizen ansprechen
-        pass
-
-    def ruehrenAN(self):
-        #GPIO fürs rühren ansprechen
-        pass
-
-    def ruehrenAUS(self):
-        #GPIO fürs rühren ansprechen
-        pass
-
-    def temperatur(self):
-        #GPIO für temperatur ansprechen
-        pass
 
 
 
@@ -133,6 +160,7 @@ hefe = "Oslo Kveik"
 BrauereiSteuerei = Brausteuerung("Pin1", "Pin2", "Pin3")
 Hochzeitkveik = Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
 HeuteBrauIch = Brauvorgang(Hochzeitkveik, BrauereiSteuerei)
+HeuteBrauIch.einmaischenVorbereiten()
 
 ### Mit Klick auf einen Startbutton ###
 HeuteBrauIch.brauvorgangStarten()
