@@ -3,6 +3,7 @@ import time
 import RPi.GPIO as GPIO
 
 ### Zuerst muss das Rezept mit allen Notwendigen Parametern zusammengestellt und initialisiert werden. ###
+
 class Rezept:
     def __init__(self, name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe):
         self.name = name
@@ -16,6 +17,7 @@ class Rezept:
 
 ### Anschließend wird die Brausteuerung (Im Sinne von Hardware) zusammengestellt und initialisiert.###
 ### Hier wird ausschließlich Hardware angesteuert und ausgelesen, Zeitsteurung findet erst im Brauvorgang statt! ###
+
 class Brausteuerung:
     def __init__(self, heizpin, ruehrpin, temperaturpin):
         self.heizpin = heizpin
@@ -61,6 +63,7 @@ class Brausteuerung:
 
 ### Hier findet unter Verwendung des Rezepts und der Hardware die Initialisierung des Brauprozesses statt. ###
 ### An dieser Stelle wird der Brauprozess gestartet, zeitgesteuert und getrackt. ###
+
 class Brauvorgang:
     def __init__(self, rezept, hardware):
         self.rezept = rezept
@@ -122,7 +125,8 @@ class Brauvorgang:
                 time.sleep(25)
 
         self.hardware.heizenAUS()
-        ### Koch dann auf Knopfdruck wieder starte?? Hier Pause fürs Läutern!###
+        ### Kochen dann auf Knopfdruck wieder starten?? Hier Pause fürs Läutern!###
+        ### Benachrichtigung für Jodprobe & Würzemessung! ###
     
     def kochen(self):
         self.hardware.heizenAN()
@@ -195,6 +199,9 @@ HeuteBrauIch.einmaischenVorbereiten()
 
 ### Mit Klick auf einen Startbutton ###
 HeuteBrauIch.brauvorgangStarten()
+
+### Nach dem Läutern das Kochen starten ###
+HeuteBrauIch.kochen()
 
 print(HeuteBrauIch.ende)
 
