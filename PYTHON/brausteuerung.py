@@ -56,10 +56,6 @@ class Brausteuerung:
     def statusAendern(self, status):
         self.status = status
         self.statusAnzeigen()
-        # Benachrichtigung, wenn sich der Status ändert - auch die einzelnen Rasten
-        # Status auf Maischplan ändern mit Klick auf Startbutton oder so?
-        # während des Fahrens der Rasten: "Temperatur und Restzeit"
-        # Kochen: "Kochen und Restzeit"
 
 ### Hier findet unter Verwendung des Rezepts und der Hardware die Initialisierung des Brauprozesses statt. ###
 ### An dieser Stelle wird der Brauprozess gestartet, zeitgesteuert und getrackt. ###
