@@ -2,11 +2,26 @@
     CI - Farben
     lila        -   #ff00ff
     hellblau    -   #00ffff
+    dunkelgrau  -   #383838
 */
 
-* {
+@import url('https://fonts.googleapis.com/css2?family=Bonheur+Royale&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Amatic+SC:wght@400;700&display=swap');
+
+/* ALLGEMEIN */
+
+body {
     margin: 0;
-    background-color: rgba(0, 0, 0, 0.233);
+    background-color: #383838;
+}
+
+a, :link, :visited, :active {
+    color: #000;
+    text-decoration: none;
+}
+
+.kachel:hover {
+    color: #ff00ff;
 }
 
 header {
@@ -14,37 +29,51 @@ header {
 }
 
 .logo {
-    margin-top: 0.2%;
-    margin-left: 0.2%;
-    width: 10%;
+    margin-top: 0.5%;
+    margin-left: 0.5%;
+    width: 20%;
     background: transparent;
 }
 
 /* INDEX */
 
-.container {
+.grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.5%;
+    column-gap: 0.5%;
+    row-gap: 3%;
     max-width: 80%;
     margin: 0.5% auto;
 }
 
 .kachel {
     background-color: transparent;
-    padding: 40px;
-    border: 2px solid #000;
-    border-radius: 10px;
-    box-shadow: 
-        -2px 0 15px -5px #ff00ff,
-         2px 0 15px -5px #00ffff;
+    padding: 11%;
+    border: 4px solid;
+    border-image:
+        linear-gradient(
+            to right,
+            #00ffff 0%,
+            #000 20%,
+            #000 80%,
+            #ff00ff 100%
+        ) 1;
+    
     text-align: center;
-    font-size: 18px;
+    font-size: 111px;
+    font-family: "Amatic SC", cursive;
+    font-weight: 900;
+    color: #00ffff;
   }
 
 /* REZEPTFORMULAR */
 
+#rezeptformular * {
+    background-color: transparent !important;
+}
+
 .abschnitt {
+    /* background-color: transparent; */
     margin-bottom: 20px;
 }
 
