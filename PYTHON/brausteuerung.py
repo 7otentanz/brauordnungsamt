@@ -17,11 +17,11 @@ class Rezept:
 ### Anschließend wird die Brausteuerung (Im Sinne von Hardware) zusammengestellt und initialisiert.###
 ### Hier wird ausschließlich Hardware angesteuert und ausgelesen, Zeitsteurung findet erst im Brauvorgang statt! ###
 class Brausteuerung:
-    def __init__(self, heizpin, ruehrpin, temperaturpin, status):
+    def __init__(self, heizpin, ruehrpin, temperaturpin):
         self.heizpin = heizpin
         self.ruehrpin = ruehrpin
         self.temperaturpin = temperaturpin
-        self.status = status
+        self.status = "Einmaischen"
         
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.heizpin, GPIO.OUT)
@@ -67,7 +67,6 @@ class Brauvorgang:
         self.hardware = hardware
         self.beginn = "beginn"
         self.ende = "ende"
-        self.status = "Einmaischen"
 
     def einmaischenVorbereiten(self):
         self.einmaischtemperaturHalten = True

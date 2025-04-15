@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<html lang="de">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
+  <title>Rezeptformular</title>
+</head>
+
+<body>
+
+  <h1>Brauordnungsamt Rezeptformular</h1>
+
+  <form id="rezeptformular">
+    <div class="abschnitt" id="name">
+      <label><b>Name: </b><input type="text" name="name" required></label>
+    </div>
+
+    <div class="abschnitt" id="schuettung">
+      <b>Schüttung: </b>
+      <div class="schuettung">
+        <input type="text" placeholder="Malzart" required>
+        <input type="number" step="0.1" placeholder="kg" required>
+      </div>
+      <button type="button" onclick="schuettungHinzufuegen()">+ weitere Schüttung</button>
+    </div>
+
+    <div class="abschnitt" id="maischplan">
+      <b>Maischplan: </b>
+      <div class="maischplan">
+        <input type="number" placeholder="Temperatur (°C)" required>
+        <input type="number" placeholder="Dauer (min)" required>
+      </div>
+      <button type="button" onclick="rastHinzufuegen()">+ weitere Rast</button>
+    </div>
+
+    <div class="abschnitt" id="kochzeit">
+      <label>Kochzeit (min): <input type="number" name="kochzeit" required></label>
+    </div>
+
+    <div class="abschnitt" id="hopfengaben">
+      <b>Hopfengaben: </b>
+      <div class="hopfengaben">
+        <input type="text" placeholder="Sorte" required>
+        <input type="number" placeholder="Menge (g)" required>
+        <input type="number" placeholder="Zeit (min)" required>
+      </div>
+      <button type="button" onclick="hopfengabeHinzufuegen()">+ weitere Hopfengabe</button>
+    </div>
+
+    <div class="abschnitt" id="gaerung">
+      <label>Anstelltemperatur (°C): <input type="number" name="anstelltemperatur" required></label>
+      <label>Hefe: <input type="text" name="hefe" required></label>
+    </div>
+
+    <button type="submit">Rezept anlegen</button>
+  </form>
+
+  <script src="scripts.js"></script>
+</body>
+
+</html>
