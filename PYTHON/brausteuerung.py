@@ -1,6 +1,7 @@
 from datetime import datetime, timedelta
 import time
 import RPi.GPIO as GPIO
+import lcddisplay
 
 ### Zuerst muss das Rezept mit allen Notwendigen Parametern zusammengestellt und initialisiert werden. ###
 
@@ -19,39 +20,39 @@ class Rezept:
 ### Hier wird ausschließlich Hardware angesteuert und ausgelesen, Zeitsteurung findet erst im Brauvorgang statt! ###
 
 class Brausteuerung:
-    def __init__(self, heizpin, ruehrpin, temperaturpin):
-        self.heizpin = heizpin
-        self.ruehrpin = ruehrpin
+    def __init__(self, temperaturpin):
+        self.heizpin = 11
+        self.ruehrpin = 13
         self.temperaturpin = temperaturpin
         self.status = "Einmaischen"
-        
-        GPIO.setmode(GPIO.BCM)
+
+        GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.heizpin, GPIO.OUT)
-        GPIO.output(self.heizpin, GPIO.LOW)
+        GPIO.output(self.heizpin, GPIO.HIGH)
         GPIO.setup(self.ruehrpin, GPIO.OUT)
-        GPIO.output(self.ruehrpin, GPIO.LOW)
+        GPIO.output(self.ruehrpin, GPIO.HIGH)
         # Temperaturpin noch zu belegen und zu programmieren
 
     def heizenAN(self):
-        GPIO.output(self.heizpin, GPIO.HIGH)
-
-    def heizenAUS(self):
         GPIO.output(self.heizpin, GPIO.LOW)
 
+    def heizenAUS(self):
+        GPIO.output(self.heizpin, GPIO.HIGH)
+
     def ruehrenAN(self):
-        GPIO.output(self.ruehrpin, GPIO.HIGH)
+        GPIO.output(self.ruehrpin, GPIO.LOW)
 
     def ruehrenAUS(self):
-        GPIO.output(self.ruehrpin, GPIO.LOW)
+        GPIO.output(self.ruehrpin, GPIO.HIGH)
 
     def temperatur(self):
         #GPIO für temperatur ansprechen
-        pass
+        return 60
+	#pass
 
     def statusAnzeigen(self):
         displaytext = self.status
-        # Hier dann der Code um den Text auf dem Display anzuzeigen
-        pass
+        lcddisplay.lcdAnzeigen(displaytext)
 
     def statusAendern(self, status):
         self.status = status
@@ -90,7 +91,7 @@ class Brauvorgang:
         # eigentlichen Brauvorgang beginnen
         self.beginn = datetime.now()
         self.ende = self.beginn + timedelta(minutes=(self.rezept.dauer))
-        self.hardware.statusAendern("Erste Rast beginnt.")
+        self.hardware.statusAendern("Erste Rast\nbeginnt.")
         self.maischen()
 
     def maischen(self):
@@ -117,7 +118,7 @@ class Brauvorgang:
                     self.hardware.heizenAUS()
                     break
                 
-                self.hardware.statusAendern(f"{sollTemperatur}°C, Restzeit {restzeit} Minuten")
+                self.hardware.statusAendern(f"{sollTemperatur}°C\nnoch {restzeit} Minuten")
                 time.sleep(25)
 
         self.hardware.heizenAUS()
@@ -127,7 +128,7 @@ class Brauvorgang:
     def kochen(self):
         self.hardware.heizenAN()
         kochzeit = self.rezept.kochzeit
-        self.hardware.statusAendern(f"Kochen: {kochzeit} Minuten")
+        self.hardware.statusAendern(f"Kochen:\nnoch {kochzeit} Minuten")
 
         start = datetime.now()
         ende= start + timedelta(minutes=kochzeit)
@@ -140,12 +141,12 @@ class Brauvorgang:
                     ### Benachrichtigung per Mail ###
                     pass
 
-            self.hardware.statusAendern(f"Kochen: {verbleibend} Minuten")            
+            self.hardware.statusAendern(f"Kochen:\nnoch{verbleibend} Minuten")            
             time.sleep(25)
         
         self.hardware.heizenAUS()
         ### Benachrichtigung: Kann gekühlt werden, Vorgang beendet ###
-        self.hardware.statusAendern("Brauvorgang abgeschlossen!")
+        self.hardware.statusAendern("Brauvorgang\nabgeschlossen!")
 
 
 
@@ -187,17 +188,18 @@ hopfengaben = {
 anstelltemperatur = 16
 hefe = "Oslo Kveik"
 
-### Beim Anlegen des Brauprozesses - Startet auch die Aufheizphase ###
-BrauereiSteuerei = Brausteuerung("Pin1", "Pin2", "Pin3")
-Hochzeitkveik = Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
-HeuteBrauIch = Brauvorgang(Hochzeitkveik, BrauereiSteuerei)
-HeuteBrauIch.einmaischenVorbereiten()
+def test():
+    ### Beim Anlegen des Brauprozesses - Startet auch die Aufheizphase ###
+    BrauereiSteuerei = Brausteuerung(temperaturpin="Pin3")
+    Hochzeitkveik = Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
+    HeuteBrauIch = Brauvorgang(Hochzeitkveik, BrauereiSteuerei)
+    HeuteBrauIch.einmaischenVorbereiten()
 
-### Mit Klick auf einen Startbutton ###
-HeuteBrauIch.brauvorgangStarten()
+    ### Mit Klick auf einen Startbutton ###
+    HeuteBrauIch.brauvorgangStarten()
 
-### Nach dem Läutern das Kochen starten ###
-HeuteBrauIch.kochen()
+    ### Nach dem Läutern das Kochen starten ###
+    HeuteBrauIch.kochen()
 
-print(HeuteBrauIch.ende)
+    print(HeuteBrauIch.ende)
 
