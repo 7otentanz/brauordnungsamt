@@ -58,8 +58,7 @@ def rezeptanlegen(request):
 		sorten = request.POST.getlist("sorte[]")
 		hopfenmengen = request.POST.getlist("hopfenmenge[]")
 		zeiten = request.POST.getlist("zeit[]")
-		hopfengaben = {
-			"hopfengaben": [
+		hopfengaben = [
 				{
 				"sorte": sorte,
 				"menge": int(menge),
@@ -67,7 +66,6 @@ def rezeptanlegen(request):
 				}
 				for sorte, menge, zeit in zip(sorten, hopfenmengen, zeiten)
 			]
-		}
 
 		rezept = {
 			"name": name,

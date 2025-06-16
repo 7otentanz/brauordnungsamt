@@ -10,34 +10,38 @@
 
 <body>
 
-    <h1>Persönliche Daten</h1>
+    <header>
+        <h1 class="ueberschrift">Persönliche Daten</h1>
+    </header>
 
-    <form action="{% url 'nutzerdatenaendern' %}" id="nutzerdaten" method="post">
-        {% csrf_token %}
+    <main class="center">
+        <form action="{% url 'nutzerdatenaendern' %}" id="nutzerdaten" method="post">
+            {% csrf_token %}
 
-        <div class="abschnitt" id="name">
-            <b>Name: </b><br>
-            <div class="nutzerdaten">
-                <input type="text" name="name" value="{{ nutzer.name }}">
+            <div class="abschnitt" id="name">
+                <b>Name: </b><br>
+                <div class="nutzerdaten">
+                    <input type="text" name="name" value="{{ nutzer.name }}">
+                </div>
             </div>
-        </div>
-        
-        <div class="abschnitt" id="hauptzollamt">
-            <b>Zuständiges Hauptzollamt: </b><br>
-            <div class="nutzerdaten">
-                <input type="text" name="hauptzollamt" value="{{ nutzer.hauptzollamt }}">
-            </div>
-        </div>    
+            
+            <div class="abschnitt" id="hauptzollamt">
+                <b>Zuständiges Hauptzollamt: </b><br>
+                <div class="nutzerdaten">
+                    <input type="text" name="hauptzollamt" value="{{ nutzer.hauptzollamt }}">
+                </div>
+            </div>    
 
-        <div class="abschnitt" id="menge">
-            <b>Dieses Jahr bereits gebraute Menge: </b><br>
-            <div class="nutzerdaten">
-                <input type="text" name="menge" value="{{ nutzer.menge }}">
+            <div class="abschnitt" id="menge">
+                <b>Dieses Jahr bereits gebraute Menge: </b><br>
+                <div class="nutzerdaten">
+                    <input type="text" name="menge" value="{{ nutzer.menge }}">
+                </div>
             </div>
-        </div>
 
-        <button type="submit">Angaben speichern!</button>
-    </form>
+            <button type="submit">Angaben speichern!</button>
+        </form>
+    </main>
 
 </body>
 
