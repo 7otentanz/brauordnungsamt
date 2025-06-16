@@ -116,7 +116,6 @@ class Brauvorgang:
                     self.hardware.heizenAN()
                 else:
                     self.hardware.heizenAUS()
-                    break
                 
                 self.hardware.statusAendern(f"{sollTemperatur}°C\nnoch {restzeit} Minuten")
                 time.sleep(25)

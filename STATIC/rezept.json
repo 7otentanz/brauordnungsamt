@@ -1,0 +1,21 @@
+{
+    "name": "Test 4",
+    "schuettung": {
+        "Malz 11": 1.1
+    },
+    "maischplan": {
+        "11": 11
+    },
+    "kochzeit": 66,
+    "hopfengaben": {
+        "hopfengaben": [
+            {
+                "sorte": "Hopfen 1",
+                "menge": 11,
+                "zeit": 11
+            }
+        ]
+    },
+    "anstelltemperatur": 12,
+    "hefe": "ne tolle."
+}

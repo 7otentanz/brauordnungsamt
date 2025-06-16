@@ -1,24 +1,73 @@
 function schuettungHinzufuegen() {
-  const div = document.createElement("div");
-  div.className = "schuettung";
-  div.innerHTML = `<input type="text" placeholder="Malzart" required>
-                   <input type="number" step="0.1" placeholder="kg" required>`;
-  document.getElementById("schuettung").insertBefore(div, document.getElementById("schuettung").lastElementChild);
-}
+    const container = document.getElementById("alleSchuettungen");
+    const div = document.createElement("div");
+    div.className = "schuettung";
+
+    const inputMalzart = document.createElement("input");
+    inputMalzart.setAttribute("type", "text");
+    inputMalzart.setAttribute("name", "malzart[]");
+    inputMalzart.setAttribute("placeholder", "Malzart");
+    inputMalzart.required = true;
+
+    const inputMalzmenge = document.createElement("input");
+    inputMalzmenge.setAttribute("type", "number");
+    inputMalzmenge.setAttribute("name", "malzmenge[]");
+    inputMalzmenge.setAttribute("placeholder", "kg");
+    inputMalzmenge.setAttribute("step", "0.1");
+    inputMalzmenge.required = true;
+
+    div.appendChild(inputMalzart);
+    div.appendChild(inputMalzmenge);
+    container.appendChild(div);
+  }
 
 function rastHinzufuegen() {
-  const div = document.createElement("div");
-  div.className = "maischplan";
-  div.innerHTML = `<input type="number" placeholder="Temperatur (°C)" required>
-                   <input type="number" placeholder="Dauer (min)" required>`;
-  document.getElementById("maischplan").insertBefore(div, document.getElementById("maischplan").lastElementChild);
-}
+    const container = document.getElementById("alleRasten");
+    const div = document.createElement("div");
+    div.className = "maischplan";
+
+    const inputTemp = document.createElement("input");
+    inputTemp.setAttribute("type", "number");
+    inputTemp.setAttribute("name", "temperatur[]");
+    inputTemp.setAttribute("placeholder", "Temperatur (°C)");
+    inputTemp.required = true;
+
+    const inputDauer = document.createElement("input");
+    inputDauer.setAttribute("type", "number");
+    inputDauer.setAttribute("name", "dauer[]");
+    inputDauer.setAttribute("placeholder", "Dauer (min)");
+    inputDauer.required = true;
+
+    div.appendChild(inputTemp);
+    div.appendChild(inputDauer);
+    container.appendChild(div);
+  }
 
 function hopfengabeHinzufuegen() {
-  const div = document.createElement("div");
-  div.className = "hopfengaben";
-  div.innerHTML = `<input type="text" placeholder="Sorte" required>
-                   <input type="number" placeholder="Menge (g)" required>
-                   <input type="number" placeholder="Zeit (min)" required>`;
-  document.getElementById("hopfengaben").insertBefore(div, document.getElementById("hopfengaben").lastElementChild);
-}
+    const container = document.getElementById("alleHopfengaben");
+    const div = document.createElement("div");
+    div.className = "hopfengaben";
+
+    const inputSorte = document.createElement("input");
+    inputSorte.setAttribute("type", "text");
+    inputSorte.setAttribute("name", "sorte[]");
+    inputSorte.setAttribute("placeholder", "Sorte");
+    inputSorte.required = true;
+
+    const inputMenge = document.createElement("input");
+    inputMenge.setAttribute("type", "number");
+    inputMenge.setAttribute("name", "hopfenmenge[]");
+    inputMenge.setAttribute("placeholder", "Menge (g)");
+    inputMenge.required = true;
+
+    const inputZeit = document.createElement("input");
+    inputZeit.setAttribute("type", "number");
+    inputZeit.setAttribute("name", "zeit[]");
+    inputZeit.setAttribute("placeholder", "Zeit (min)");
+    inputZeit.required = true;
+
+    div.appendChild(inputSorte);
+    div.appendChild(inputMenge);
+    div.appendChild(inputZeit);
+    container.appendChild(div);
+  }
