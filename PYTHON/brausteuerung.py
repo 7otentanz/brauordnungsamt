@@ -21,12 +21,12 @@ class Rezept:
 
 class Brausteuerung:
     def __init__(self, temperaturpin):
-        self.heizpin = 11
-        self.ruehrpin = 13
+        self.heizpin = 17
+        self.ruehrpin = 27
         self.temperaturpin = temperaturpin
-        self.status = "Einmaischen"
+        self.status = ""
 
-        GPIO.setmode(GPIO.BOARD)
+        GPIO.setmode(GPIO.BCM)
         GPIO.setup(self.heizpin, GPIO.OUT)
         GPIO.output(self.heizpin, GPIO.HIGH)
         GPIO.setup(self.ruehrpin, GPIO.OUT)
@@ -56,7 +56,7 @@ class Brausteuerung:
 
     def statusAendern(self, status):
         self.status = status
-        with open("/var/www/brauordnungsamt/static/status.txt", "w") as datei:
+        with open("/var/www/brauordnungsamt/static/status.txt", "w", encoding="utf-8") as datei:
             datei.write(status)
         self.statusAnzeigen()
 
@@ -75,6 +75,7 @@ class Brauvorgang:
         benachrichtigt = False
         while self.einmaischtemperaturHalten:
             istTemperatur = self.hardware.temperatur()
+            self.hardware.statusAendern(f"Aufheizen:\n{istTemperatur}°C")
             if istTemperatur < 59.5:
                 self.hardware.heizenAN()
             else:
@@ -192,6 +193,7 @@ hefe = "Oslo Kveik"
 def test():
     ### Beim Anlegen des Brauprozesses - Startet auch die Aufheizphase ###
     BrauereiSteuerei = Brausteuerung(temperaturpin="Pin3")
+    BrauereiSteuerei.statusAendern("Test")
     Hochzeitkveik = Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
     HeuteBrauIch = Brauvorgang(Hochzeitkveik, BrauereiSteuerei)
     HeuteBrauIch.einmaischenVorbereiten()

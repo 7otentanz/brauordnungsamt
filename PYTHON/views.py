@@ -1,10 +1,10 @@
 from django.shortcuts import render, HttpResponse, redirect
-import os, json
+import os, json, threading
 
 static = "/var/www/brauordnungsamt/static"
 
 def brautest(request):
-	import brausteuerung
+	from . import brausteuerung
 	brausteuerung.test()
 
 def ledanschalten(request):
@@ -23,8 +23,7 @@ def ledanschalten(request):
 	return HttpResponse("Toll, klappt endlich.")
 
 def lcddisplay(request):
-	import lcddisplay
-
+	from . import lcddisplay
 	lcddisplay.lcdAnzeigen("Dieser Text wird\nangezeigt!")
 
 	return HttpResponse("Prima, klappt auch.")
@@ -78,24 +77,34 @@ def rezeptanlegen(request):
 		}
 
 		rezeptjson = os.path.join(static, "rezept.json")
-		with open(rezeptjson, "w") as datei:
+		with open(rezeptjson, "w", encoding="utf-8") as datei:
 			json.dump(rezept, datei, indent=4)
+
+		# Brauvorgang im Hintergrund starten, dass sofort weitergeleitet werden kann auf die Statusseite
+		def brauvorgangstarten():
+			from . import brausteuerung
+			bierrezept = brausteuerung.Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
+			brauhaus = brausteuerung.Brausteuerung(temperaturpin="Pin3")
+			brauvorgang = brausteuerung.Brauvorgang(bierrezept, brauhaus)
+			brauvorgang.einmaischenVorbereiten()
 		
-		#### RETURN AUF WEITERES PROZESSTEMPLATE!!!! ####
-		return redirect("rezept")
+		thread = threading.Thread(target=brauvorgangstarten)
+		thread.start()
+		
+		return redirect("status")
 
 #### NUTZER ####	
 
 def nutzer(request):
 	nutzerjson = os.path.join(static, "nutzer.json")
-	with open(nutzerjson, "r") as datei:
+	with open(nutzerjson, "r", encoding="utf-8") as datei:
 		nutzerdaten = json.load(datei)
 	
 	return render(request, 'app/nutzer.html', {"nutzer": nutzerdaten})
 
 def nutzerdatenaendern(request):
 	nutzerjson = os.path.join(static, "nutzer.json")
-	with open(nutzerjson, "r") as datei:
+	with open(nutzerjson, "r", encoding="utf-8") as datei:
 		nutzerdaten = json.load(datei)
 	
 	if request.method == "POST":
@@ -105,7 +114,7 @@ def nutzerdatenaendern(request):
 
 		nutzerdaten.update({"name": name, "hauptzollamt": hauptzollamt, "menge": menge})
 
-		with open(nutzerjson, "w") as datei:
+		with open(nutzerjson, "w", encoding="utf-8") as datei:
 			json.dump(nutzerdaten, datei, indent=4)
 	
 	return redirect("nutzer")
@@ -113,7 +122,7 @@ def nutzerdatenaendern(request):
 #### STATUS ####
 
 def status(request):
-	with open("/var/www/brauordnungsamt/static/status.txt", "r") as datei:
+	with open("/var/www/brauordnungsamt/static/status.txt", "r", encoding="utf-8") as datei:
 		status = datei.read()
 	
 	return render(request, "app/status.html", {"status": status})

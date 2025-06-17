@@ -117,3 +117,12 @@ form > button.absenden {
 button.mehr {
     color: #00ffff;
 }
+
+/* STATUS */
+
+p.statusdisplay {
+    font-size: 99px;
+    font-family: "Amatic SC", cursive;
+    font-weight: 750;
+    color: #ff00ff;
+}
