@@ -56,6 +56,8 @@ class Brausteuerung:
 
     def statusAendern(self, status):
         self.status = status
+        with open("/var/www/brauordnungsamt/static/status.txt", "w") as datei:
+            datei.write(status)
         self.statusAnzeigen()
 
 ### Hier findet unter Verwendung des Rezepts und der Hardware die Initialisierung des Brauprozesses statt. ###

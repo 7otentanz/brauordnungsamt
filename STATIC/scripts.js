@@ -12,7 +12,7 @@ function schuettungHinzufuegen() {
     const inputMalzmenge = document.createElement("input");
     inputMalzmenge.setAttribute("type", "number");
     inputMalzmenge.setAttribute("name", "malzmenge[]");
-    inputMalzmenge.setAttribute("placeholder", "kg");
+    inputMalzmenge.setAttribute("placeholder", "Menge (kg)");
     inputMalzmenge.setAttribute("step", "0.1");
     inputMalzmenge.required = true;
 

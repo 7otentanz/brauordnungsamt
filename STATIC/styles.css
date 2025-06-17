@@ -80,9 +80,13 @@ main.center {
     color: #ff00ff;
 }
 
-/* REZEPTFORMULAR */
+/* FORMULARE */
 
 #rezeptformular * {
+    background-color: transparent !important;
+}
+
+#nutzerdaten * {
     background-color: transparent !important;
 }
 
@@ -91,11 +95,25 @@ main.center {
     margin-bottom: 20px;
 }
 
-label {
-    display: block;
-    margin-top: 10px;
+div.abschnitt > b {
+    color: #ff00ff;
+    font-family: "Amatic SC", cursive;
+    font-size: 44px;
 }
 
 input {
     margin-right: 10px;
+    color: #00ffff;
+    font-size: 33px;
+}
+
+form > button.absenden {
+    color: #00ffff;
+    font-size: 22px;
+    font-weight: 900;
+    border-color: #ff00ff;
+}
+
+button.mehr {
+    color: #00ffff;
 }

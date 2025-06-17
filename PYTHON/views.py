@@ -110,4 +110,10 @@ def nutzerdatenaendern(request):
 	
 	return redirect("nutzer")
 
-#### ####
+#### STATUS ####
+
+def status(request):
+	with open("/var/www/brauordnungsamt/static/status.txt", "r") as datei:
+		status = datei.read()
+	
+	return render(request, "app/status.html", {"status": status})

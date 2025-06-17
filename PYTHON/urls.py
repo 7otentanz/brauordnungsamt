@@ -29,6 +29,7 @@ urlpatterns = [
     path('nutzer', boa.nutzer, name="nutzer"),
     path('nutzerdatenaendern', boa.nutzerdatenaendern, name="nutzerdatenaendern"),
     path('rezeptanlegen', boa.rezeptanlegen, name="rezeptanlegen"),
+    path('status', boa.status, name="status"),
 ]
 
 urlpatterns += staticfiles_urlpatterns()
