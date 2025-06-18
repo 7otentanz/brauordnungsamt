@@ -53,7 +53,6 @@ class Brausteuerung:
         GPIO.output(self.heizpin, GPIO.HIGH)
         GPIO.setup(self.ruehrpin, GPIO.OUT)
         GPIO.output(self.ruehrpin, GPIO.HIGH)
-        # Temperaturpin noch zu belegen und zu programmieren
 
     def heizenAN(self):
         GPIO.output(self.heizpin, GPIO.LOW)
@@ -109,7 +108,7 @@ class Brauvorgang:
                 self.hardware.heizenAUS()
                 # Wenn das este mal die Einmaischtemperatur erreicht ist wird das Rührwerk eingeschalten und eine Benachrichtigung gesendet.
                 if benachrichtigt == False:
-                    ### Benachrichtung per Mail?###
+                    emailsenden("Einmaischtemperatur erreicht!", "Hallo,\nDein Braukessel ist aufgeheizt und du kannst mit dem Maischen loslegen.\nGut Sud!")
                     self.hardware.ruehrenAN()
                     benachrichtigt = True
             time.sleep(25)
@@ -151,8 +150,9 @@ class Brauvorgang:
                 time.sleep(25)
 
         self.hardware.heizenAUS()
+        emailsenden("Bitte Jodprobe durchführen!", "Hallo,\nAlle Rasten sind fertig! Du kannst jetzt mir dem Läutern loslegen, wenn deine Jodprobe erfolgreich war.\nWeiterhin viel Erfolg!")
+
         ### Kochen dann auf Knopfdruck wieder starten?? Hier Pause fürs Läutern!###
-        ### Benachrichtigung für Jodprobe & Würzemessung! ###
     
     def kochen(self):
         self.hardware.heizenAN()
@@ -167,8 +167,7 @@ class Brauvorgang:
 
             for eineHopfengabe in self.rezept.hopfengaben["hopfengaben"]:
                 if eineHopfengabe["zeit"] == verbleibend:
-                    ### Benachrichtigung per Mail ###
-                    pass
+                    emailsenden(f"Hopfengabe: {eineHopfengabe["menge"]}g {eineHopfengabe["sorte"]}!", "Hallo,\nEine Hopfengabe ist fällig. Im Betreff kannst du sehen, was du deiner kochenden Würze hinzufügen musst.\nWeiterhin Gut Sud!")
 
             self.hardware.statusAendern(f"Kochen:\nnoch{verbleibend} Minuten")            
             time.sleep(25)
