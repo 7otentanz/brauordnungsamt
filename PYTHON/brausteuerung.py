@@ -21,8 +21,8 @@ class Rezept:
 
 class Brausteuerung:
     def __init__(self, temperaturpin):
-        self.heizpin = 17
-        self.ruehrpin = 27
+        self.heizpin = 5
+        self.ruehrpin = 6
         self.temperaturpin = temperaturpin
         self.status = ""
 

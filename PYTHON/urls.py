@@ -21,9 +21,9 @@ from app import views as boa
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('ledanschalten/', boa.ledanschalten),
     path('lcddisplay', boa.lcddisplay),
     path('brautest', boa.brautest),
+    path('relais', boa.relaisschalten),
     path('', boa.index),
     path('rezept', boa.rezept, name="rezept"),
     path('nutzer', boa.nutzer, name="nutzer"),

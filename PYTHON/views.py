@@ -7,26 +7,18 @@ def brautest(request):
 	from . import brausteuerung
 	brausteuerung.test()
 
-def ledanschalten(request):
-	import RPi.GPIO as GPIO
-	import time
-
-	GPIO.setmode(GPIO.BCM)
-	GPIO.setup(17, GPIO.OUT)
-
-	GPIO.output(17, GPIO.HIGH)
-	time.sleep(5)
-	GPIO.output(17, GPIO.LOW)
-
-	GPIO.cleanup()
-
-	return HttpResponse("Toll, klappt endlich.")
 
 def lcddisplay(request):
 	from . import lcddisplay
 	lcddisplay.lcdAnzeigen("Dieser Text wird\nangezeigt!")
 
 	return HttpResponse("Prima, klappt auch.")
+
+def relaisschalten(request):
+	from . import relais
+	relais.undlos()
+
+	return HttpResponse("Relais schalten!")
 
 #### INDEX ####
 
