@@ -1,7 +1,29 @@
 from datetime import datetime, timedelta
 import time
+import json
 import RPi.GPIO as GPIO
 import lcddisplay
+
+def emailsenden(betreff, inhalt):
+    import smtplib
+    from email.message import EmailMessage
+    with open("/var/www/brauordnungsamt/static/nutzer.json", "r") as datei:
+        nutzerdaten = json.load(datei)
+        email = nutzerdaten["email"]
+
+    adresse = "brauordnungsamt@gmail.com"
+    passwort = "cpmw yhaw lukk vltk"
+    server = smtplib.SMTP_SSL("smtp.gmail.com", 465)
+    server.login(adresse, passwort)
+
+    msg = EmailMessage()
+    msg["From"] = adresse
+    msg["To"] = email
+    msg["Subject"] = betreff
+    msg.set_content(inhalt)
+    server.send_message(msg)
+        
+    server.quit()
 
 ### Zuerst muss das Rezept mit allen Notwendigen Parametern zusammengestellt und initialisiert werden. ###
 
@@ -20,10 +42,10 @@ class Rezept:
 ### Hier wird ausschließlich Hardware angesteuert und ausgelesen, Zeitsteurung findet erst im Brauvorgang statt! ###
 
 class Brausteuerung:
-    def __init__(self, temperaturpin):
+    def __init__(self):
         self.heizpin = 5
         self.ruehrpin = 6
-        self.temperaturpin = temperaturpin
+        self.temperaturpin = 4
         self.status = ""
 
         GPIO.setmode(GPIO.BCM)
@@ -46,9 +68,14 @@ class Brausteuerung:
         GPIO.output(self.ruehrpin, GPIO.HIGH)
 
     def temperatur(self):
-        #GPIO für temperatur ansprechen
-        return 60
-	#pass
+        sensordatei = "/sys/bus/w1/devices/28-00000057a667/w1_slave"
+
+        with open(sensordatei, "r", encoding="utf-8") as datei:
+            zeilen = datei.readlines()
+            for zeile in zeilen:
+                if "t=" in zeile:
+                    temperatur = zeile.strip().split("t=")[-1]
+                    return float(temperatur) / 1000.0
 
     def statusAnzeigen(self):
         displaytext = self.status
@@ -192,7 +219,7 @@ hefe = "Oslo Kveik"
 
 def test():
     ### Beim Anlegen des Brauprozesses - Startet auch die Aufheizphase ###
-    BrauereiSteuerei = Brausteuerung(temperaturpin="Pin3")
+    BrauereiSteuerei = Brausteuerung()
     BrauereiSteuerei.statusAendern("Test")
     Hochzeitkveik = Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
     HeuteBrauIch = Brauvorgang(Hochzeitkveik, BrauereiSteuerei)

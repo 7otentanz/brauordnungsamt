@@ -5,8 +5,7 @@ static = "/var/www/brauordnungsamt/static"
 
 def brautest(request):
 	from . import brausteuerung
-	brausteuerung.test()
-
+	brausteuerung.emailsenden("betreff", "inhalt")
 
 def lcddisplay(request):
 	from . import lcddisplay
@@ -76,7 +75,7 @@ def rezeptanlegen(request):
 		def brauvorgangstarten():
 			from . import brausteuerung
 			bierrezept = brausteuerung.Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
-			brauhaus = brausteuerung.Brausteuerung(temperaturpin="Pin3")
+			brauhaus = brausteuerung.Brausteuerung()
 			brauvorgang = brausteuerung.Brauvorgang(bierrezept, brauhaus)
 			brauvorgang.einmaischenVorbereiten()
 		
@@ -103,8 +102,9 @@ def nutzerdatenaendern(request):
 		name = request.POST.get("name", "")
 		hauptzollamt = request.POST.get("hauptzollamt", "")
 		menge = int(request.POST.get("menge", ""))
+		email = request.POST.get("email", "")
 
-		nutzerdaten.update({"name": name, "hauptzollamt": hauptzollamt, "menge": menge})
+		nutzerdaten.update({"name": name, "hauptzollamt": hauptzollamt, "menge": menge, "email": email})
 
 		with open(nutzerjson, "w", encoding="utf-8") as datei:
 			json.dump(nutzerdaten, datei, indent=4)
