@@ -69,7 +69,19 @@
       </div>
 
       <button type="submit" class="absenden">Rezept anlegen & Brauvorgang starten &#10093; &#10093; &#10093;</button>
+    </form><br><br>
+
+    <h2 class="ueberschrift2">... oder schnapp' dir ein Rezept von Maische, Malz & Mehr!</h2>
+
+    <form action="{% url 'scrapeRezept' %}" method="post" id="rezeptformular">
+      {% csrf_token %}
+      <div class="abschnitt" id="url">
+        <b>Vollständige URL: </b>
+        <input type="text" name="url" required>
+      </div>
+      <button type="submit">Rezept scrapen und Brauvorgang starten &#10093; &#10093; &#10093;</button>
     </form>
+
   </main>
 
   <script src="{% static 'scripts.js' %}"></script>

@@ -72,22 +72,46 @@ def rezeptanlegen(request):
 			json.dump(rezept, datei, indent=4)
 
 		jetzt = datetime.datetime.now()
-		print(jetzt)
 		heute = jetzt.strftime("%Y-%m-%d")
-		print(heute)
 		rezept["abgeschlossen"] = False
-		print("rezept ist auch aktualisiert")
 		protokolljson = os.path.join(static, "protokolle", f"{heute}.json")
-		print(f"{heute}.json in der variablen.")
 		with open(protokolljson, "w", encoding="utf-8") as datei:
-			print("und auch geöffnet.")
 			json.dump(rezept, datei, indent=4)
-			print("und jetzt auch beschrieben")
 
 		# Brauvorgang im Hintergrund starten, dass sofort weitergeleitet werden kann auf die Statusseite
 		def brauvorgangstarten():
 			from . import brausteuerung
 			bierrezept = brausteuerung.Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
+			brauhaus = brausteuerung.Brausteuerung()
+			brauvorgang = brausteuerung.Brauvorgang(bierrezept, brauhaus)
+			brauvorgang.einmaischenVorbereiten()
+		
+		thread = threading.Thread(target=brauvorgangstarten)
+		thread.start()
+		
+		return redirect("status")
+
+def scrapeRezept(request):
+	from . import mmumscraper
+	if request.method == "POST":
+		url = request.POST.get("url")
+		rezept = mmumscraper.rezeptscrapen(url)
+
+		rezeptjson = os.path.join(static, "rezept.json")
+		with open(rezeptjson, "w", encoding="utf-8") as datei:
+			json.dump(rezept, datei, indent=4)
+
+		jetzt = datetime.datetime.now()
+		heute = jetzt.strftime("%Y-%m-%d")
+		rezept["abgeschlossen"] = False
+		protokolljson = os.path.join(static, "protokolle", f"{heute}.json")
+		with open(protokolljson, "w", encoding="utf-8") as datei:
+			json.dump(rezept, datei, indent=4)
+
+		# Brauvorgang im Hintergrund starten, dass sofort weitergeleitet werden kann auf die Statusseite
+		def brauvorgangstarten():
+			from . import brausteuerung
+			bierrezept = brausteuerung.Rezept(rezept["name"], rezept["schuettung"], rezept["maischplan"], rezept["kochzeit"], rezept["hopfengaben"], rezept["anstelltemperatur"], rezept["hefe"])
 			brauhaus = brausteuerung.Brausteuerung()
 			brauvorgang = brausteuerung.Brauvorgang(bierrezept, brauhaus)
 			brauvorgang.einmaischenVorbereiten()

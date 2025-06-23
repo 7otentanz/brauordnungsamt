@@ -45,6 +45,13 @@ main.center {
     color: #00ffff;
 }
 
+.ueberschrift2 {
+    font-size: 99px;
+    font-family: "Amatic SC", cursive;
+    font-weight: 900;
+    color: #00ffff;
+}
+
 /* INDEX */
 
 .grid {
