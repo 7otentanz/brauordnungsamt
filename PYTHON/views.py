@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, redirect
-import os, json, threading
+import os, json, threading, datetime
 
 static = "/var/www/brauordnungsamt/static"
 
@@ -70,6 +70,19 @@ def rezeptanlegen(request):
 		rezeptjson = os.path.join(static, "rezept.json")
 		with open(rezeptjson, "w", encoding="utf-8") as datei:
 			json.dump(rezept, datei, indent=4)
+
+		jetzt = datetime.datetime.now()
+		print(jetzt)
+		heute = jetzt.strftime("%Y-%m-%d")
+		print(heute)
+		rezept["abgeschlossen"] = False
+		print("rezept ist auch aktualisiert")
+		protokolljson = os.path.join(static, "protokolle", f"{heute}.json")
+		print(f"{heute}.json in der variablen.")
+		with open(protokolljson, "w", encoding="utf-8") as datei:
+			print("und auch geöffnet.")
+			json.dump(rezept, datei, indent=4)
+			print("und jetzt auch beschrieben")
 
 		# Brauvorgang im Hintergrund starten, dass sofort weitergeleitet werden kann auf die Statusseite
 		def brauvorgangstarten():

@@ -67,7 +67,7 @@ class Brausteuerung:
         GPIO.output(self.ruehrpin, GPIO.HIGH)
 
     def temperatur(self):
-        sensordatei = "/sys/bus/w1/devices/28-00000057a667/w1_slave"
+        sensordatei = "/sys/bus/w1/devices/28-0b28d44674cf/w1_slave"
 
         with open(sensordatei, "r", encoding="utf-8") as datei:
             zeilen = datei.readlines()
@@ -81,7 +81,7 @@ class Brausteuerung:
         lcddisplay.lcdAnzeigen(displaytext)
 
     def statusAendern(self, status):
-        self.status = status
+        self.status = str(status)
         with open("/var/www/brauordnungsamt/static/status.txt", "w", encoding="utf-8") as datei:
             datei.write(status)
         self.statusAnzeigen()
@@ -106,10 +106,9 @@ class Brauvorgang:
                 self.hardware.heizenAN()
             else:
                 self.hardware.heizenAUS()
-                # Wenn das este mal die Einmaischtemperatur erreicht ist wird das Rührwerk eingeschalten und eine Benachrichtigung gesendet.
+                self.hardware.statusAendern("Einmaischtemperatur\nerreicht!")
                 if benachrichtigt == False:
                     emailsenden("Einmaischtemperatur erreicht!", "Hallo,\nDein Braukessel ist aufgeheizt und du kannst mit dem Maischen loslegen.\nGut Sud!")
-                    self.hardware.ruehrenAN()
                     benachrichtigt = True
             time.sleep(25)
 
@@ -124,6 +123,7 @@ class Brauvorgang:
         self.maischen()
 
     def maischen(self):
+        self.hardware.ruehrenAN()
         for sollTemperatur, dauer in self.rezept.maischplan.items():
 
             # Auf Rasttemperatur aufheizen #
@@ -134,7 +134,7 @@ class Brauvorgang:
                 else:
                     self.hardware.heizenAUS()
                     break
-                time.sleep(25)
+                time.sleep(10)
             
             # Rasttemperatur halten #
             rastende = datetime.now() + timedelta(minutes=dauer)
@@ -147,9 +147,10 @@ class Brauvorgang:
                     self.hardware.heizenAUS()
                 
                 self.hardware.statusAendern(f"{sollTemperatur}°C\nnoch {restzeit} Minuten")
-                time.sleep(25)
+                time.sleep(10)
 
         self.hardware.heizenAUS()
+        self.hardware.ruehrenAUS()
         emailsenden("Bitte Jodprobe durchführen!", "Hallo,\nAlle Rasten sind fertig! Du kannst jetzt mir dem Läutern loslegen, wenn deine Jodprobe erfolgreich war.\nWeiterhin viel Erfolg!")
 
         ### Kochen dann auf Knopfdruck wieder starten?? Hier Pause fürs Läutern!###
@@ -167,7 +168,7 @@ class Brauvorgang:
 
             for eineHopfengabe in self.rezept.hopfengaben["hopfengaben"]:
                 if eineHopfengabe["zeit"] == verbleibend:
-                    emailsenden(f"Hopfengabe: {eineHopfengabe["menge"]}g {eineHopfengabe["sorte"]}!", "Hallo,\nEine Hopfengabe ist fällig. Im Betreff kannst du sehen, was du deiner kochenden Würze hinzufügen musst.\nWeiterhin Gut Sud!")
+                    emailsenden(f"Hopfengabe: {eineHopfengabe['menge']}g {eineHopfengabe['sorte']}!", "Hallo,\nEine Hopfengabe ist fällig. Im Betreff kannst du sehen, was du deiner kochenden Würze hinzufügen musst.\nWeiterhin Gut Sud!")
 
             self.hardware.statusAendern(f"Kochen:\nnoch{verbleibend} Minuten")            
             time.sleep(25)
