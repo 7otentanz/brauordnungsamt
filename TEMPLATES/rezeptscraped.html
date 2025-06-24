@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="{% static 'styles.css' %}">
+  <title>Rezeptformular</title>
+</head>
+
+<body>
+
+  <header>
+    <h1 class="ueberschrift">Lege ein Rezept an und starte deinen Brauvorgang!</h1>
+  </header>
+
+  <main class="center">
+    <form action="{% url 'rezeptanlegen' %}" method="post" id="rezeptformular">
+      {% csrf_token %}
+      <div class="abschnitt" id="name">
+        <b>Name: </b>
+        <input type="text" name="name" required value="{{ rezept.name }}">
+      </div>
+
+      <div class="abschnitt" id="schuettung">
+        <b>Schüttung: </b>
+        <div id="alleSchuettungen">
+        {% for malzart, menge in rezept.schuettung.items %}
+          <div class="schuettung">
+            <input type="text" name="malzart[]" placeholder="Malzart" required value="{{ malzart }}">
+            <input type="number" step="0.1" name="malzmenge[]" placeholder="Menge (kg)" required value="{{ menge }}">
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+
+      <div class="abschnitt" id="maischplan">
+        <b>Maischplan: </b>
+        <div id="alleRasten">
+        {% for temperatur, dauer in rezept.maischplan.items %}
+          <div class="maischplan">
+            <input type="number" name="temperatur[]" placeholder="Temperatur (°C)" required value="{{ temperatur }}">
+            <input type="number" name="dauer[]" placeholder="Dauer (min)" required value="{{ dauer }}">
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+
+      <div class="abschnitt" id="kochzeit">
+        <b>Kochzeit: </b>
+          <input type="number" name="kochzeit" placeholder="(min)" required value="{{ rezept.kochzeit }}">
+      </div>
+
+      <div class="abschnitt" id="hopfengaben">
+        <b>Hopfengaben: </b>
+        <div id="alleHopfengaben">
+        {% for hopfengabe in rezept.hopfengaben %}
+          <div class="hopfengaben">
+            <input type="text" name="sorte[]" placeholder="Sorte" required value="{{ hopfengabe.sorte }}">
+            <input type="number" name="hopfenmenge[]" placeholder="Menge (g)" required value="{{ hopfengabe.menge }}">
+            <input type="number" name="zeit[]" placeholder="Zeit (min)" required value="{{ hopfengabe.zeit }}">
+          </div>
+        {% endfor %}
+        </div>
+      </div>
+
+      <div class="abschnitt" id="gaerung">
+        <b>Anstelltemperatur: </b>
+          <input type="number" name="anstelltemperatur" placeholder="(C°)" required value="{{ rezept.anstelltemperatur }}"> <br> <br>
+        <b>Hefe: </b>
+          <input type="text" name="hefe" required value="{{ rezept.hefe }}">
+      </div>
+
+      <button type="submit" class="absenden">Rezept anlegen & Brauvorgang starten &#10093; &#10093; &#10093;</button>
+    </form><br><br>
+
+  </main>
+
+  <script src="{% static 'scripts.js' %}"></script>
+
+</body>
+
+</html>

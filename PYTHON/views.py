@@ -51,7 +51,7 @@ def rezeptanlegen(request):
 		hopfengaben = [
 				{
 				"sorte": sorte,
-				"menge": int(menge),
+				"menge": float(menge),
 				"zeit": int(zeit)
 				}
 				for sorte, menge, zeit in zip(sorten, hopfenmengen, zeiten)
@@ -119,7 +119,7 @@ def scrapeRezept(request):
 		thread = threading.Thread(target=brauvorgangstarten)
 		thread.start()
 		
-		return redirect("status")
+		return render(request, 'app/rezeptscraped.html', {"rezept": rezept})
 
 #### NUTZER ####	
 

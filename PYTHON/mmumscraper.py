@@ -96,9 +96,12 @@ def rezeptscrapen(url):
                         hopfenDauer = rezept["kochzeit"]
                     else:
                         hopfenDauerA = hopfen.find("div", class_="right").get_text()
-                        hopfenDauer = int(hopfenDauerA.split(" ")[-3])
+                        try:
+                            hopfenDauer = int(hopfenDauerA.split(" ")[-3])
+                        except:
+                            continue
                     hopfenMengeA = hopfen.find("div", class_="right").get_text()
-                    hopfenMenge = int(hopfenMengeA.split(" ")[1])
+                    hopfenMenge = float(hopfenMengeA.split(" ")[1])
                     hopfenObjekt = {
                         "sorte": hopfenSorte,
                         "menge": hopfenMenge,
