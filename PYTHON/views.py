@@ -3,32 +3,21 @@ import os, json, threading, datetime
 
 static = "/var/www/brauordnungsamt/static"
 
-def brautest(request):
-	from . import brausteuerung
-	brausteuerung.emailsenden("betreff", "inhalt")
-
-def lcddisplay(request):
-	from . import lcddisplay
-	lcddisplay.lcdAnzeigen("Dieser Text wird\nangezeigt!")
-
-	return HttpResponse("Prima, klappt auch.")
-
-def relaisschalten(request):
-	from . import relais
-	relais.undlos()
-
-	return HttpResponse("Relais schalten!")
 
 #### INDEX ####
 
+# Landingpage mit Auswahlkacheln.
 def index(request):
 	return render(request, "app/index.html")
 
+
 #### REZEPT ####
 
+# Rezeptseite zum selbst eingeben oder um eine URL für den Scraper einzutragen.
 def rezept(request):
 	return render(request, "app/rezept.html")
 
+# Selbst eingetragenes Rezept anlegen und Kessel auf Einmaischtemperatur aufheizen
 def rezeptanlegen(request):
 	if request.method == "POST":
 
@@ -67,10 +56,12 @@ def rezeptanlegen(request):
 			"hefe": hefe
 		}
 
+		# initialisiertes Rezept in eine json schreiben.
 		rezeptjson = os.path.join(static, "rezept.json")
 		with open(rezeptjson, "w", encoding="utf-8") as datei:
 			json.dump(rezept, datei, indent=4)
 
+		# Protokoll-datei anlegen aber noch auf "nicht abgeschlossen" setzen.
 		jetzt = datetime.datetime.now()
 		heute = jetzt.strftime("%Y-%m-%d")
 		rezept["abgeschlossen"] = False
@@ -78,7 +69,7 @@ def rezeptanlegen(request):
 		with open(protokolljson, "w", encoding="utf-8") as datei:
 			json.dump(rezept, datei, indent=4)
 
-		# Brauvorgang im Hintergrund starten, dass sofort weitergeleitet werden kann auf die Statusseite
+		# Heizen auf Einmaischtemperatur im Hintergrund starten, dass sofort weitergeleitet werden kann auf die Statusseite.
 		def brauvorgangstarten():
 			from . import brausteuerung
 			bierrezept = brausteuerung.Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
@@ -91,16 +82,21 @@ def rezeptanlegen(request):
 		
 		return redirect("status")
 
+# Mit angegebener URL ein Rezept scrapen und auch hier auf Einmaischtemperatur heizen.
 def scrapeRezept(request):
 	from . import mmumscraper
 	if request.method == "POST":
+
+		# Rezept vom Scraper initialisieren lassen.
 		url = request.POST.get("url")
 		rezept = mmumscraper.rezeptscrapen(url)
 
+		# auch hier initialisiertes Rezept in eine json speichern.
 		rezeptjson = os.path.join(static, "rezept.json")
 		with open(rezeptjson, "w", encoding="utf-8") as datei:
 			json.dump(rezept, datei, indent=4)
 
+		# auch hier ein nicht abgeschlossenes Protokoll anlegen.
 		jetzt = datetime.datetime.now()
 		heute = jetzt.strftime("%Y-%m-%d")
 		rezept["abgeschlossen"] = False
@@ -108,21 +104,23 @@ def scrapeRezept(request):
 		with open(protokolljson, "w", encoding="utf-8") as datei:
 			json.dump(rezept, datei, indent=4)
 
-		# Brauvorgang im Hintergrund starten, dass sofort weitergeleitet werden kann auf die Statusseite
-		def brauvorgangstarten():
-			from . import brausteuerung
-			bierrezept = brausteuerung.Rezept(rezept["name"], rezept["schuettung"], rezept["maischplan"], rezept["kochzeit"], rezept["hopfengaben"], rezept["anstelltemperatur"], rezept["hefe"])
-			brauhaus = brausteuerung.Brausteuerung()
-			brauvorgang = brausteuerung.Brauvorgang(bierrezept, brauhaus)
-			brauvorgang.einmaischenVorbereiten()
+		# # auch hier Heizen auf Einmaischtemperatur im Hintergrund starten, dass sofort weitergeleitet werden kann auf die Statusseite.
+		# def einmaischenStarten():
+		# 	from . import brausteuerung
+		# 	bierrezept = brausteuerung.Rezept(rezept["name"], rezept["schuettung"], rezept["maischplan"], rezept["kochzeit"], rezept["hopfengaben"], rezept["anstelltemperatur"], rezept["hefe"])
+		# 	brauhaus = brausteuerung.Brausteuerung()
+		# 	brauvorgang = brausteuerung.Brauvorgang(bierrezept, brauhaus)
+		# 	brauvorgang.einmaischenVorbereiten()
 		
-		thread = threading.Thread(target=brauvorgangstarten)
-		thread.start()
+		# thread = threading.Thread(target=einmaischenStarten)
+		# thread.start()
 		
 		return render(request, 'app/rezeptscraped.html', {"rezept": rezept})
 
+
 #### NUTZER ####	
 
+# Nutzerdaten aus der angelegten json laden.
 def nutzer(request):
 	nutzerjson = os.path.join(static, "nutzer.json")
 	with open(nutzerjson, "r", encoding="utf-8") as datei:
@@ -130,6 +128,7 @@ def nutzer(request):
 	
 	return render(request, 'app/nutzer.html', {"nutzer": nutzerdaten})
 
+# Nutzerdaten in der json ändern.
 def nutzerdatenaendern(request):
 	nutzerjson = os.path.join(static, "nutzer.json")
 	with open(nutzerjson, "r", encoding="utf-8") as datei:
@@ -148,10 +147,31 @@ def nutzerdatenaendern(request):
 	
 	return redirect("nutzer")
 
+
 #### STATUS ####
 
+# Status aus der json auslesen, die die brausteuerung.py bei Statusänderung schreibt
 def status(request):
 	with open("/var/www/brauordnungsamt/static/status.txt", "r", encoding="utf-8") as datei:
 		status = datei.read()
 	
 	return render(request, "app/status.html", {"status": status})
+
+def rastenStarten(request):
+	if request.method == "POST":
+
+		rezeptjson = os.path.join(static, "rezept.json")
+		with open(rezeptjson, "r", encoding="utf-8") as datei:
+			rezept = json.load(datei)
+		
+		def maischrastenStarten():
+			from . import brausteuerung
+			bierrezept = brausteuerung.Rezept(rezept["name"], rezept["schuettung"], rezept["maischplan"], rezept["kochzeit"], rezept["hopfengaben"], rezept["anstelltemperatur"], rezept["hefe"])
+			brauhaus = brausteuerung.Brausteuerung()
+			brauvorgang = brausteuerung.Brauvorgang(bierrezept, brauhaus)
+			brauvorgang.brauvorgangStarten()
+		
+		thread = threading.Thread(target=maischrastenStarten)
+		thread.start()
+		
+		return redirect("status")

@@ -17,6 +17,13 @@
 
     <main class="center">
         <p class="statusdisplay">{{ status }}</p>
+
+        {% if "Einmaischtemperatur" in status %}
+        <form action="{% url 'rastenStarten' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="absenden">Rasten beginnen!</button>
+        </form>
+        {% endif %}
     </main>
 
 </body>

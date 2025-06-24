@@ -101,8 +101,8 @@ class Brauvorgang:
         benachrichtigt = False
         while self.einmaischtemperaturHalten:
             istTemperatur = self.hardware.temperatur()
-            self.hardware.statusAendern(f"Aufheizen:\n{istTemperatur}°C")
             if istTemperatur < 59.5:
+                self.hardware.statusAendern(f"Aufheizen:\n{istTemperatur}°C")
                 self.hardware.heizenAN()
             else:
                 self.hardware.heizenAUS()
@@ -110,26 +110,23 @@ class Brauvorgang:
                 if benachrichtigt == False:
                     emailsenden("Einmaischtemperatur erreicht!", "Hallo,\nDein Braukessel ist aufgeheizt und du kannst mit dem Maischen loslegen.\nGut Sud!")
                     benachrichtigt = True
+                    self.einmaischtemperaturHalten = False
             time.sleep(25)
 
     def brauvorgangStarten(self):
-        # einmaischenVorbereiten zuerst beenden
-        self.einmaischtemperaturHalten = False
-        time.sleep(25)
-        # eigentlichen Brauvorgang beginnen
         self.beginn = datetime.now()
         self.ende = self.beginn + timedelta(minutes=(self.rezept.dauer))
         self.hardware.statusAendern("Erste Rast\nbeginnt.")
-        self.maischen()
+        #self.maischen()
 
-    def maischen(self):
+    #def maischen(self):
         self.hardware.ruehrenAN()
         for sollTemperatur, dauer in self.rezept.maischplan.items():
 
             # Auf Rasttemperatur aufheizen #
             while True:
                 istTemperatur = self.hardware.temperatur()
-                if istTemperatur < (sollTemperatur - 0.5):      # Toleranz von 0.5 Grad
+                if istTemperatur < (float(sollTemperatur) - 0.5):      # Toleranz von 0.5 Grad
                     self.hardware.heizenAN()
                 else:
                     self.hardware.heizenAUS()
@@ -141,7 +138,7 @@ class Brauvorgang:
             while datetime.now() < rastende:
                 restzeit = (rastende - datetime.now()).seconds // 60
                 istTemperatur = self.hardware.temperatur()
-                if istTemperatur < (sollTemperatur - 0.5):      # Toleranz von 0.5 Grad
+                if istTemperatur < (float(sollTemperatur) - 0.5):      # Toleranz von 0.5 Grad
                     self.hardware.heizenAN()
                 else:
                     self.hardware.heizenAUS()
