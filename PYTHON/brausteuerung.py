@@ -162,8 +162,6 @@ class Brauvorgang:
         self.hardware.ruehrenAUS()
         self.hardware.statusAendern("Maischen\nbeendet!")
         emailsenden("Bitte Jodprobe durchführen!", "Hallo,\nAlle Rasten sind fertig! Du kannst jetzt mir dem Läutern loslegen, wenn deine Jodprobe erfolgreich war.\nWeiterhin viel Erfolg!")
-
-        ### Kochen dann auf Knopfdruck wieder starten?? Hier Pause fürs Läutern!###
     
     def kochen(self):
         self.hardware.heizenAN()
@@ -189,61 +187,6 @@ class Brauvorgang:
 
         self.hardware.heizenAUS()
         self.hardware.statusAendern("Brauvorgang\nabgeschlossen!")
+        time.sleep(30)
+        GPIO.cleanup()
         emailsenden("Brauvorgang abgeschlossen!", "Hallo,\ndein Brauvorgang ist abgeschlossen. Du kannst jetzt mit dem Kühlen beginnen!\nWeiterhin viel Erfolg!")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-### Rezept zusammenstellen, hier als Beispiel ###
-name = "Hochzeitskveik"
-schuettung = {"Pilsner Malz": 4.5, "Weizenmalz": 0.25}
-maischplan = {54: 15, 63: 60, 73: 15, 76: 1} # im Format: "temperatur": "minuten"
-kochzeit = 65
-hopfengaben = {
-    "hopfengaben": [
-        {
-            "sorte": "Polaris",
-            "menge": 8,
-            "zeit": kochzeit
-        },
-        {
-            "sorte": "Perle",
-            "menge": 20,
-            "zeit": 10
-        },
-        {
-            "sorte": "Polaris",
-            "menge": 20,
-            "zeit": 10
-        }
-    ]
-}
-anstelltemperatur = 16
-hefe = "Oslo Kveik"
-
-def test():
-    ### Beim Anlegen des Brauprozesses - Startet auch die Aufheizphase ###
-    BrauereiSteuerei = Brausteuerung()
-    BrauereiSteuerei.statusAendern("Test")
-    Hochzeitkveik = Rezept(name, schuettung, maischplan, kochzeit, hopfengaben, anstelltemperatur, hefe)
-    HeuteBrauIch = Brauvorgang(Hochzeitkveik, BrauereiSteuerei)
-    HeuteBrauIch.einmaischenVorbereiten()
-
-    ### Mit Klick auf einen Startbutton ###
-    HeuteBrauIch.brauvorgangStarten()
-
-    ### Nach dem Läutern das Kochen starten ###
-    HeuteBrauIch.kochen()
-
-    print(HeuteBrauIch.ende)
-
