@@ -150,13 +150,14 @@ def nutzerdatenaendern(request):
 
 #### STATUS ####
 
-# Status aus der json auslesen, die die brausteuerung.py bei Statusänderung schreibt
+# Status aus der json auslesen, die die brausteuerung.py bei Statusänderung schreibt.
 def status(request):
 	with open("/var/www/brauordnungsamt/static/status.txt", "r", encoding="utf-8") as datei:
 		status = datei.read()
 	
 	return render(request, "app/status.html", {"status": status})
 
+# Mit dem Maischplan und Rasten-fahren beginnen, sobald eingemaischt wurde.
 def rastenStarten(request):
 	if request.method == "POST":
 
@@ -172,6 +173,26 @@ def rastenStarten(request):
 			brauvorgang.brauvorgangStarten()
 		
 		thread = threading.Thread(target=maischrastenStarten)
+		thread.start()
+		
+		return redirect("status")
+	
+# Mit dem Würzekochen beginnen, wenn der Maischplan abgeschlossen ist und alle Rasten gefahren wurden.
+def kochenStarten(request):
+	if request.method == "POST":
+
+		rezeptjson = os.path.join(static, "rezept.json")
+		with open(rezeptjson, "r", encoding="utf-8") as datei:
+			rezept = json.load(datei)
+		
+		def wuerzekochen():
+			from . import brausteuerung
+			bierrezept = brausteuerung.Rezept(rezept["name"], rezept["schuettung"], rezept["maischplan"], rezept["kochzeit"], rezept["hopfengaben"], rezept["anstelltemperatur"], rezept["hefe"])
+			brauhaus = brausteuerung.Brausteuerung()
+			brauvorgang = brausteuerung.Brauvorgang(bierrezept, brauhaus)
+			brauvorgang.kochen()
+		
+		thread = threading.Thread(target=wuerzekochen)
 		thread.start()
 		
 		return redirect("status")

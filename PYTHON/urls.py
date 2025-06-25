@@ -29,6 +29,7 @@ urlpatterns = [
     path('status', boa.status, name="status"),
     path('scrapeRezept', boa.scrapeRezept, name="scrapeRezept"),
     path('rastenStarten', boa.rastenStarten, name="rastenStarten"),
+    path('kochenStarten', boa.kochenStarten, name="kochenStarten"),
 ]
 
 urlpatterns += staticfiles_urlpatterns()

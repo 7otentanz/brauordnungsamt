@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="25">
+    <meta http-equiv="refresh" content="5">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>Status</title>
 </head>
@@ -21,7 +21,14 @@
         {% if "Einmaischtemperatur" in status %}
         <form action="{% url 'rastenStarten' %}" method="post">
             {% csrf_token %}
-            <button type="submit" class="absenden">Rasten beginnen!</button>
+            <button type="submit" class="absenden">Rasten nach Maischplan beginnen!</button>
+        </form>
+        {% endif %}
+
+        {% if "Maischen" in status %}
+        <form action="{% url 'kochenStarten' %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="absenden">Mit dem Würzekochen beginnen!</button>
         </form>
         {% endif %}
     </main>

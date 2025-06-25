@@ -115,6 +115,7 @@ input {
 }
 
 form > button.absenden {
+    background: transparent;
     color: #00ffff;
     font-size: 22px;
     font-weight: 900;
