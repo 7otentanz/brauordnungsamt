@@ -28,28 +28,10 @@ Die Installation des **Brauordnungsamt** auf deinem Raspberry Pi ist auch ohne P
 Grundsätzlich ist das **Brauordnungsamt** dafür da, Rezepte in einen Prozess zu übersetzen und diese Rezepte temperatur- und zeitgesteuert umzusetzen. Wir müssen also, bevor wir die Software verwenden könne, unseren Raspberry Pi 5 korrekt verkabeln.  
 <img src="fritzing.png" width="100%" height="auto">  
 Wie immer bei elektronischen Bauteilen verschiedenster Herkunft gilt: im Zweifel haltet euch an die Vorgaben des Herstellers. In diesem Fritzing seht ihr die Verkabelung meiner Bauteile - vor allem beim LCD Display kann es hier zu kleinen Unterschieden kommen.  
-<table>
-    <tr>
-        <th>DS18B20 Sensor</th>
-        <th>LCD-Display</th>
-        <th>Relais-Modul</th>
-    </tr>
-    <table>
-        <tr>
-            <th>Bauteil</tr>
-            <th>Raspberry Pi</tr>
-        </tr>
-        <tr>
-            <td>VCC (rot)</td>
-            <td>3.3V</td>
-        </tr>
-        <tr>
-            <td>DATA (gelb)</td>
-            <td>GPIO 4</td>
-        </tr>
-        <tr>
-            <td>GND (schwarz)</td>
-            <td>GND</td>
-        </tr>
 
-</table>
+| DS18B20 Sensor         |                     | LCD-Display           |                     | Relais-Modul         |                     |
+|------------------------|---------------------|------------------------|---------------------|-----------------------|---------------------|
+| **Bauteil**            | **Raspberry Pi**    | **Bauteil**           | **Raspberry Pi**    | **Bauteil**           | **Raspberry Pi**    |
+| VCC (rot)              | 3.3V                | VCC                   | 5V                  | IN1                   | GPIO 17             |
+| DATA (gelb)            | GPIO 4              | SDA                   | GPIO 2              | GND                   | GND                 |
+| GND (schwarz)          | GND                 | SCL                   | GPIO 3              | VCC                   | 3.3V                |
