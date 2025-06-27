@@ -2,7 +2,7 @@
 ## Was ist das Brauordnungsamt?
 <img src="plakat.png" width="100%" height="auto"></img>  
 Das **Brauordnungsamt** ist eine Software zur automatisierten Steuerung des Brauvorgangs von Hobbybrauern.  
-Auf Grundlage eines Raspberry Pis sowie einiger Sensoren, Aktoren und elektrotechnischer Bauteile prozessiert das **Brauordnungsamt** ein von dir angelegten (oder von maischemalzundmehr.de gescraptes!) Rezept von Einmaischen bis zur fertig gekochten Würze, sodass dir mehr Zeit von deinem Brautag bleibt.  
+Auf Grundlage eines Raspberry Pis sowie einiger Sensoren, Aktoren und elektrotechnischer Bauteile prozessiert das **Brauordnungsamt** ein von dir angelegtes (oder von maischemalzundmehr.de gescraptes!) Rezept vom Einmaischen bis zur fertig gekochten Würze, sodass dir mehr Zeit von deinem Brautag bleibt.  
 Außerdem erstellt das **Brauordnugsamt** ein Brautagebuch für dich, dass du jederzeit auf eine potenzielle Kontrolle des Zolls vorbereitet bist.  
 Apropos Zoll: Bei Bedarf erstellt dir das **Brauordnungsamt** aus einem deine Brauprotokolle ein vollständiges Formular 2075 zur Biersteueranmeldung in wenigen Klicks!  
 Konzipiert wurde das **Brauordnungsamt** für die "Einkocherklasse" - Aber auch die Steuerung von Induktionskochplatten oder Mehrkesselsystemen stellt für die Software kein Problem dar.
@@ -26,3 +26,5 @@ Die Installation des **Brauordnungsamt** auf deinem Raspberry Pi ist auch ohne P
 
 ### Vorbereitungen
 Grundsätzlich ist das **Brauordnungsamt** dafür da, Rezepte in einen Prozess zu übersetzen und diese Rezepte temperatur- und zeitgesteuert umzusetzen. Wir müssen also, bevor wir die Software verwenden könne, unseren Raspberry Pi 5 korrekt verkabeln.  
+<img src="fritzing.png" width="100%" height="auto">  
+
