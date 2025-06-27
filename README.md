@@ -27,4 +27,13 @@ Die Installation des **Brauordnungsamt** auf deinem Raspberry Pi ist auch ohne P
 ### Vorbereitungen
 Grundsätzlich ist das **Brauordnungsamt** dafür da, Rezepte in einen Prozess zu übersetzen und diese Rezepte temperatur- und zeitgesteuert umzusetzen. Wir müssen also, bevor wir die Software verwenden könne, unseren Raspberry Pi 5 korrekt verkabeln.  
 <img src="fritzing.png" width="100%" height="auto">  
-
+Wie immer bei elektronischen Bauteilen verschiedenster Herkunft gilt: im Zweifel haltet euch an die Vorgaben des Herstellers. In diesem Fritzing seht ihr die Verkabelung meiner Bauteile - vor allem beim LCD Display kann es hier zu kleinen Unterschieden kommen.  
+<table>
+    <thread>
+        <tr>
+            <th>DS18B20 Sensor</th>
+            <th>LCD-Display</th>
+            <th>Relais-Modul</th>
+        </tr>
+    </thread>
+</table>
