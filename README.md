@@ -1,4 +1,4 @@
-# Brauordnungsamt
+# Willkommen im Brauordnungsamt!
 ## Was ist das Brauordnungsamt?
 <img src="plakat.png" width="100%" height="auto"></img>  
 Das **Brauordnungsamt** ist eine Software zur automatisierten Steuerung des Brauvorgangs von Hobbybrauern.  
@@ -12,15 +12,16 @@ Die Installation des **Brauordnungsamt** auf deinem Raspberry Pi ist auch ohne P
 
 ### Voraussetzungen
 1. **Raspberry Pi 5** (RAM spielen keine Rolle)
-2. **Breadboard**
-3. **ausreichend Jumperkabe**l (M-F, M-M)
-4. **DS18B20 Temperatursensor** (wasserdicht, Edelstahlsonde)
-5. **Mehrkanal Relais** (5V/10A - mindestens 2-Kanal, bei Mehrkesselsystemen gerne mehr)
-6. **1602 LCD-Display**
-7. **Schutzkontaktstecker** (zwei, bei Mehrkesselsystemen drei)
-8. **Schutzkontaktbuchse** (zwei, bei Mehrkesselsystemen drei)
-9. **1m dreiadriges Kabel** (mindestens 1,5mm<sup>2</sup> Querschnitt)
-10. **WAGO-Klemmen**
+2. **Micro-SD Karte** (Min. 8GB)
+3. **Breadboard**
+4. **ausreichend Jumperkabel** (M-F, M-M)
+5. **DS18B20 Temperatursensor** (wasserdicht, Edelstahlsonde)
+6. **Mehrkanal Relais** (5V/10A - mindestens 2-Kanal, bei Mehrkesselsystemen gerne mehr)
+7. **1602 LCD-Display**
+8. **Schutzkontaktstecker** (zwei, bei Mehrkesselsystemen drei)
+9. **Schutzkontaktbuchse** (zwei, bei Mehrkesselsystemen drei)
+10. **1m dreiadriges Kabel** (mindestens 1,5mm<sup>2</sup> Querschnitt)
+11. **WAGO-Klemmen**
   
 § Disclaimer an dieser Stelle: *Strom von der Steckose kann tödlich sein! Elektroinstallationen dürfen nur von Elektrofachkräften durchgeführt werden!*
 
@@ -48,4 +49,20 @@ Wie immer bei elektronischen Bauteilen verschiedenster Herkunft gilt: im Zweifel
 Zusätzlich:  
 **DS18B20**: 4,7k Ohm Widerstand zwischen *VSS* und *DATA*  
 **LCD-Display**: 2k Ohm Widerstand zwischen *A* am Display und *5V* am Raspberry Pi  
- 
+
+### Installation Brauordnungsamt
+1. Lade dir das `brauordnungsamt.img` herunter.
+2. Geh' auf <a href="https://www.raspberrypi.com/software/">raspberrypi.com/software</a> und lade dir den Raspberry Pi Imager herunter.
+3. Installiere den Raspberry Pi Imager auf deinem Computer und öffne ihn.
+4. Wähle als *Device* Raspberry Pi 5 aus und unter *Choose Storage* die Micro-SD Karte für deinen Raspberry Pi.
+5. Unter *Choose OS* wählst du *use custom*, ganz unten in der Liste.
+6. Wähle im Fenster, das sich nun öffnet, `brauordnungsamt.img`.
+7. Ein Pop-Up Fenster fragt nach *OS customisation*, hier muss *edit settings* ausgewählt werden.
+8. Unter *GENERAL* muss als hostname **horst** eingetragen werden, als username **tim** - ein Passwort ist frei wählbar.
+9. Unter *Configure wireless LAN* muss der Name deines WLANs und das richtige Passwort eingetragen werden. Es muss das gleiche WLAN sein, mit dem auch der Computer verbunden ist, an dem du gerade sitzt!
+10. Unter *SERVICES* muss SSH mit Passwort Authentifizierung ausgewählt sein - das Passwort hast du gerade selbst gewählt.
+11. Mit *save* bestätigen und im Pop-Up Fenster von vorhin *YES* auswählen und das nächste Fenster mit *YES* bestätigen.
+12. Wenn alles fertig ist, kannst du die SD-Karte entfernen, in deinen Raspberry Pi einstecken und ihn starten.
+
+Wenn du jetzt mit einem Browser auf deinem Computer <a href="http://horst.local:8000/">horst.local:8000</a> besucht, siehst du die Landing Page von **Brauordnungsamt**!
+<img src="landingpage.png" width="100%" height="auto">
