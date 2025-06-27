@@ -29,9 +29,23 @@ Grundsätzlich ist das **Brauordnungsamt** dafür da, Rezepte in einen Prozess z
 <img src="fritzing.png" width="100%" height="auto">  
 Wie immer bei elektronischen Bauteilen verschiedenster Herkunft gilt: im Zweifel haltet euch an die Vorgaben des Herstellers. In diesem Fritzing seht ihr die Verkabelung meiner Bauteile - vor allem beim LCD Display kann es hier zu kleinen Unterschieden kommen.  
 
-| DS18B20 Sensor         |                     | LCD-Display           |                     | Relais-Modul         |                     |
+| DS18B20 Sensor         |                     | LCD-Display            |                     | Relais-Modul          |                     |
 |------------------------|---------------------|------------------------|---------------------|-----------------------|---------------------|
-| **Bauteil**            | **Raspberry Pi**    | **Bauteil**           | **Raspberry Pi**    | **Bauteil**           | **Raspberry Pi**    |
-| VCC (rot)              | 3.3V                | VCC                   | 5V                  | IN1                   | GPIO 17             |
-| DATA (gelb)            | GPIO 4              | SDA                   | GPIO 2              | GND                   | GND                 |
-| GND (schwarz)          | GND                 | SCL                   | GPIO 3              | VCC                   | 3.3V                |
+| **Bauteil**            | **Raspberry Pi**    | **Bauteil**            | **Raspberry Pi**    | **Bauteil**           | **Raspberry Pi**    |
+| VCC (rot)              | 3.3V                | VSS                    | GND                 | VCC                   | 5V                  |
+| DATA (gelb)            | GPIO 4              | VDD                    | 5V                  | GND                   | GND                 |
+| GND (schwarz)          | GND                 | VE                     | GND                 | IN 1                  | GPIO 5              |
+|                        |                     | RS                     | GPIO 14             | IN 4                  | GPIO 6              |
+|                        |                     | RW                     | GND                 |                       |                     |
+|                        |                     | Enable                 | GPIO 15             |                       |                     |
+|                        |                     | d4                     | GPIO 17             |                       |                     |
+|                        |                     | d5                     | GPIO 18             |                       |                     |
+|                        |                     | d6                     | GPIO 27             |                       |                     |
+|                        |                     | d7                     | GPIO 22             |                       |                     |
+|                        |                     | A                      | 5V                  |                       |                     |
+|                        |                     | C                      | GND                 |                       |                     |
+  
+Zusätzlich:  
+**DS18B20**: 4,7k Ohm Widerstand zwischen *VSS* und *DATA*  
+**LCD-Display**: 2k Ohm Widerstand zwischen *A* am Display und *5V* am Raspberry Pi  
+ 
