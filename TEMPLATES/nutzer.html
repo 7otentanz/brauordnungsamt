@@ -18,33 +18,89 @@
         <form action="{% url 'nutzerdatenaendern' %}" id="nutzerdaten" method="post">
             {% csrf_token %}
 
-            <div class="abschnitt" id="name">
-                <b>Name: </b><br>
+            <div class="abschnitt" id="nachname">
+                <b>Nachname: </b><br>
                 <div class="nutzerdaten">
-                    <input type="text" name="name" value="{{ nutzer.name }}">
+                    <input type="text" name="nachname" value="{{ nutzer.nachname }}">
                 </div>
             </div>
 
-            <div class="abschnitt" id="email">
-                <b>Dieses Jahr bereits gebraute Menge: </b><br>
+            <div class="abschnitt" id="vorname">
+                <b>Vorname: </b><br>
                 <div class="nutzerdaten">
-                    <input type="text" name="email" value="{{ nutzer.email }}">
+                    <input type="text" name="vorname" value="{{ nutzer.vorname }}">
                 </div>
             </div>
-            
+
+            <div class="abschnitt" id="ort">
+                <b>Wohnort: </b><br>
+                <div class="nutzerdaten">
+                    <input type="text" name="ort" value="{{ nutzer.ort }}">
+                </div>
+            </div>
+
+            <div class="abschnitt" id="strasse">
+                <b>Straße: </b><br>
+                <div class="nutzerdaten">
+                    <input type="text" name="strasse" value="{{ nutzer.strasse }}">
+                </div>
+            </div>
+
+            <div class="abschnitt" id="hausnummer">
+                <b>Hausnummer: </b><br>
+                <div class="nutzerdaten">
+                    <input type="text" name="hausnummer" value="{{ nutzer.hausnummer }}">
+                </div>
+            </div>
+
+            <div class="abschnitt" id="plz">
+                <b>Postleitzahl: </b><br>
+                <div class="nutzerdaten">
+                    <input type="text" name="plz" value="{{ nutzer.plz }}">
+                </div>
+            </div>
+
             <div class="abschnitt" id="hauptzollamt">
                 <b>Zuständiges Hauptzollamt: </b><br>
                 <div class="nutzerdaten">
                     <input type="text" name="hauptzollamt" value="{{ nutzer.hauptzollamt }}">
                 </div>
-            </div>    
+            </div>  
+
+            <div class="abschnitt" id="email">
+                <b>Email: </b><br>
+                <div class="nutzerdaten">
+                    <input type="email" name="email" value="{{ nutzer.email }}">
+                </div>
+            </div>
+
+            <div class="abschnitt" id="telefon">
+                <b>Telefon: </b><br>
+                <div class="nutzerdaten">
+                    <input type="text" name="telefon" value="{{ nutzer.telefon }}">
+                </div>
+            </div>  
+            
+            <div class="abschnitt" id="geburtstag">
+                <b>Geburtsdatum: </b><br>
+                <div class="nutzerdaten">
+                    <input type="date" name="geburtstag" value="{{ nutzer.geburtstag }}">
+                </div>
+            </div>  
 
             <div class="abschnitt" id="menge">
                 <b>Dieses Jahr bereits gebraute Menge: </b><br>
                 <div class="nutzerdaten">
-                    <input type="text" name="menge" value="{{ nutzer.menge }}">
+                    <input type="number" name="menge" step="1" value="{{ nutzer.menge }}">
                 </div>
             </div>
+
+            <div class="abschnitt" id="sudmenge">
+                <b>Sudgröße: </b><br>
+                <div class="nutzerdaten">
+                    <input type="number" name="sudmenge" step="1" value="{{ nutzer.sudmenge }}">
+                </div>
+            </div>  
 
             <button type="submit" class="absenden">Angaben speichern &#10093; &#10093; &#10093;</button>
         </form>

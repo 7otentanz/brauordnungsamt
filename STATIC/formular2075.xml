@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xml-data xmlns="http://www.lucom.com/ffw/xml-data-1.0.xsd">
+	<form>catalog://Unternehmen/vst/bier/2075</form>
+	<instance>
+		<datarow>
+			<element id="ID_USER">.anonymous</element>
+			<element id="Vorblatt_vorname">Vorname</element>
+			<element id="Vorblatt_land">DE</element>
+			<element id="Vorblatt_ort">Ort</element>
+			<element id="Vorblatt_strasse">Straße</element>
+			<element id="Vorblatt_haus_nr">111</element>
+			<element id="Vorblatt_rechtsform">Privat</element>
+			<element id="Vorblatt_plz_de">11111</element>
+			<element id="Vorblatt_name_firma">Nachname</element>
+			<element id="Vorblatt_art_vertretung">Bevollmächtigter nach § 80 AO</element>
+			<element id="Vorblatt_hza">HZA</element>
+			<element id="Vorblatt_e_mail3">meine@email.de</element>
+			<element id="Vorblatt_wechsel1">Name bzw. Firmenbezeichnung*</element>
+			<element id="Vorblatt_k_antrag1">eigenem</element>
+			<element id="Vorblatt_wechsel8">Gründungsdatum*</element>
+			<element id="Vorblatt_wechsel5">Registereintrag</element>
+			<element id="Vorblatt_k_postfach_ja">nein</element>
+			<element id="Vorblatt_wechsel2">Geburtsdatum*</element>
+			<element id="Vorblatt_wechsel3">Postfachadresse</element>
+			<element id="Vorblatt_wechsel6">Hauptbuchhaltungsdaten</element>
+			<element id="Vorblatt_wechsel4">Sitz der Geschäftsleitung</element>
+			<element id="Vorblatt_wechsel7">Gründungsdatum*</element>
+			<element id="Vorblatt_k_Sitz_geschaeft_ja">nein</element>
+			<element id="Vorblatt_k_Hauptbuchhaltung_ja">nein</element>
+			<element id="Vorblatt_k_empfang_ja">nein</element>
+			<element id="2075_ansprechpartner">Vorname Nachname</element>
+			<element id="2075_email">meine@email.de</element>
+			<element id="2075_telefon">01575123123123</element>
+			<element id="endsumme">1,89</element>
+			<element id="2075_ort">Ort</element>
+			<element id="2075_datum2">12.12.2025 00:00:00</element>
+			<element id="k2">nein</element>
+			<element id="k3">nein</element>
+			<element id="k4">nein</element>
+			<element id="k9">nein</element>
+			<element id="k10">nein</element>
+			<element id="k1">nein</element>
+			<element id="zwisu2">9,44</element>
+			<element id="versteuerung2">0,20</element>
+			<element id="betrag2">1,89</element>
+			<element id="Vorblatt_gruendung">01.01.1990 00:00:00</element>
+			<element id="k11">nein</element>
+			<element id="k12">nein</element>
+			<element id="k13">nein</element>
+			<element id="k14">nein</element>
+			<element id="k15">nein</element>
+			<element id="k16">ja</element>
+			<element id="k17">nein</element>
+			<element id="plato2">12</element>
+			<element id="steuersatz2">0,7870</element>
+		</datarow>
+	</instance>
+</xml-data>
+

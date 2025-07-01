@@ -1,6 +1,14 @@
  {
-    "name": "Testnutzer Dieter",
+    "nachname": "Testnutzer",
+    "vorname": "Dieter",
+    "ort": "Ortshausen",
+    "strasse": "Straße",
+    "hausnummer": "21",
+    "plz": "12345",
+    "hauptzollamt": "Karlsruhe",
+    "email": "t_hauser@web.de",
+    "telefon": "01575123123123",
+    "geburtstag": "12.12.2012",
     "menge": 0,
-    "hauptzollamt": "Hauptzollamt Karlsruhe",
-    "email": "t_hauser@web.de"
+    "sundmenge": 20,
  }

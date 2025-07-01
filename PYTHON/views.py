@@ -135,12 +135,20 @@ def nutzerdatenaendern(request):
 		nutzerdaten = json.load(datei)
 	
 	if request.method == "POST":
-		name = request.POST.get("name", "")
+		nachname = request.POST.get("nachname", "")
+		vorname = request.POST.get("vorname", "")
+		ort = request.POST.get("ort", "")
+		strasse = request.POST.get("strasse", "")
+		hausnummer = request.POST.get("hausnummer", "")
+		plz = request.POST.get("plz", "")
 		hauptzollamt = request.POST.get("hauptzollamt", "")
-		menge = int(request.POST.get("menge", ""))
 		email = request.POST.get("email", "")
+		telefon = request.POST.get("telefon", "")
+		geburtstag = request.POST.get("geburtstag", "")
+		menge = int(request.POST.get("menge", ""))
+		sudmenge = int(request.POST.get("sudmenge", ""))
 
-		nutzerdaten.update({"name": name, "hauptzollamt": hauptzollamt, "menge": menge, "email": email})
+		nutzerdaten.update({"nachname": nachname, "vorname": vorname, "ort": ort, "strasse": strasse, "hausnummer": hausnummer, "plz": plz, "hauptzollamt": hauptzollamt, "email": email, "telefon": telefon, "geburtstag": geburtstag, "menge": menge, "sudmenge": sudmenge})
 
 		with open(nutzerjson, "w", encoding="utf-8") as datei:
 			json.dump(nutzerdaten, datei, indent=4)

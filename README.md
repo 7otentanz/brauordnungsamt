@@ -64,5 +64,7 @@ Zusätzlich:
 11. Mit *save* bestätigen und im Pop-Up Fenster von vorhin *YES* auswählen und das nächste Fenster mit *YES* bestätigen.
 12. Wenn alles fertig ist, kannst du die SD-Karte entfernen, in deinen Raspberry Pi einstecken und ihn starten.
 
-Wenn du jetzt mit einem Browser auf deinem Computer <a href="http://horst.local:8000/">horst.local:8000</a> besucht, siehst du die Landing Page von **Brauordnungsamt**!
-<img src="landingpage.png" width="100%" height="auto">
+Wenn du jetzt mit einem Browser auf deinem Computer <a href="http://horst.local:8000/">horst.local:8000</a> besucht, siehst du die Landing Page von **Brauordnungsamt**!  
+<img src="landingpage.png" width="100%" height="auto">  
+  
+**Gut Sud!**
