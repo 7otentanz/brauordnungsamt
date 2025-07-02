@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="5">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>Brautagebuch</title>
 </head>
@@ -19,28 +18,32 @@
         {% for protokoll in alleProtokolle %}
             {% for datum, daten in protokoll.items %}
                 {% if daten.abgeschlossen %}
-
-                    <h2>Brauprotokoll {{ datum }}</h2>
-                    <p>Name: {{ daten.name }}</p>
-                    <p>Sudgröße: {{ daten.menge }}</p>
-                    <p>Maischplan: </p>
-                        <ul>
-                            {% for temperatur, dauer in daten.maischplan.items %}
-                            <li>{{ temperatur }} °C: {{ dauer }} Minuten</li>
-                            {% endfor %}
-                        </ul>
-                    <p>Hopfengaben: </p>
-                        <ul>
-                            {% for hopfen in daten.hopfengaben %}
-                                <li>{{ hopfen.sorte }}: {{ hopfen.menge }} bei {{ hopfen.zeit }} Minuten</li>
-                            {% endfor %}
-                        </ul>
-                    <p>Kochzeit: {{ daten.kochzeit }}</p>
-                    <p>Anstelltemperatur: {{ daten.anstelltemperatur }}</p>
-                    <p>Hefe: {{ daten.hefe }}</p>
-                    <form action="{% url 'steuerformularErstellen' %}" method="post">
-                        <button type="submit" class="absenden">Steuerformular erstellen!</button>
-                    </form>
+                    <div class="protokoll">
+                        <h2>   Brauprotokoll {{ datum }}   </h2>
+                        <p><b>{{ daten.name }}</b></p>
+                        <p>Sudgröße: {{ daten.menge }} L</p>
+                        <p>Maischplan: </p>
+                            <ul>
+                                {% for temperatur, dauer in daten.maischplan.items %}
+                                <li>{{ temperatur }} °C: {{ dauer }} Minuten</li>
+                                {% endfor %}
+                            </ul>
+                        <p>Hopfengaben: </p>
+                            <ul>
+                                {% for hopfen in daten.hopfengaben %}
+                                    <li>{{ hopfen.sorte }}: {{ hopfen.menge }} g bei {{ hopfen.zeit }} Minuten</li>
+                                {% endfor %}
+                            </ul>
+                        <p>Kochzeit: {{ daten.kochzeit }} Minuten</p>
+                        <p>Anstelltemperatur: {{ daten.anstelltemperatur }} °C</p>
+                        <p>Hefe: {{ daten.hefe }}</p>
+                        <form action="{% url 'steuerformularErstellen' %}" method="post">
+                            <button type="submit" class="absenden">Steuerformular erstellen!</button>
+                        </form>
+                        <br><br>
+                        <hr>
+                        <br>
+                    </div>
 
                 {% endif %}
             {% endfor %}
