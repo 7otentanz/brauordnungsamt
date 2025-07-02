@@ -202,6 +202,7 @@ def kochenStarten(request):
 
 #### BRAUTAGEBUCH ####
 
+# Alle Protokolle suchen, auslesen und an das Template übergeben.
 def brautagebuch(request):
 
 	protokollordner = os.path.join(static, "protokolle")
@@ -215,3 +216,7 @@ def brautagebuch(request):
 			alleProtokolle.append({datum: protokolldaten})
 
 	return render(request, "app/brautagebuch.html", {"alleProtokolle": alleProtokolle})
+
+def steuerformularErstellen(request):
+
+	return render(request, "app/brautagebuch.html")
