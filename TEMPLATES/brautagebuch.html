@@ -38,7 +38,9 @@
                         <p>Anstelltemperatur: {{ daten.anstelltemperatur }} °C</p>
                         <p>Hefe: {{ daten.hefe }}</p>
                         <form action="{% url 'steuerformularErstellen' %}" method="post">
-                            <button type="submit" class="absenden">Steuerformular erstellen!</button>
+                            {% csrf_token %}
+                            <input type="hidden" name="datum" value="{{ datum }}">
+                            <button type="submit" class="absenden" onclick="zumZoll()">Steuerformular erstellen!</button>
                         </form>
                         <br><br>
                         <hr>
@@ -49,7 +51,7 @@
             {% endfor %}
         {% endfor %}
     </main>
-
+    <script src="{% static 'scripts.js' %}"></script>
 </body>
 
 </html>

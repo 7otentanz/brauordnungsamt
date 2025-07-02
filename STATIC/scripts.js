@@ -71,3 +71,7 @@ function hopfengabeHinzufuegen() {
     div.appendChild(inputZeit);
     container.appendChild(div);
   }
+
+function zumZoll() {
+  window.open("https://www.formulare-bfinv.de/ffw/action/invoke.do?id=2075", "_blank");
+}
