@@ -1,5 +1,6 @@
 from django.shortcuts import render, HttpResponse, redirect
 import os, json, threading, datetime
+import xml.etree.ElementTree as ET
 
 static = "/var/www/brauordnungsamt/static"
 
@@ -219,4 +220,77 @@ def brautagebuch(request):
 
 def steuerformularErstellen(request):
 
-	return render(request, "app/brautagebuch.html")
+	if request.method == "POST":
+
+		# Alle Daten auslesen und in Variablen speichern
+		datumA = request.POST.get("datum", "")
+		datumB = datetime.datetime.strptime(datumA, "%Y-%m-%d")
+		datum = datumB.strftime("%d.%m.%Y 00:00:00")
+
+		protokolljson = os.path.join(static, "protokolle", f"{datumA}.json")
+		with open(protokolljson, "r", encoding="utf-8") as datei:
+			protokolldaten = json.load(datei)
+		mengeA = protokolldaten["menge"]
+		mengeB = mengeA / 100
+		menge = f"{mengeB:.2f}"
+		
+		nutzerjson = os.path.join(static, "nutzer.json")
+		with open(nutzerjson, "r", encoding="utf-8") as datei:
+			nutzerdaten = json.load(datei)
+		
+		steuerformular = os.path.join(static, "formular2075.xml")
+
+		tree = ET.parse(steuerformular)
+		root = tree.getroot()
+		nsURL = "http://www.lucom.com/ffw/xml-data-1.0.xsd"
+		ns = {"ns": nsURL}
+		ET.register_namespace("", nsURL)
+		
+		# Mit xPath das datarow Element mit den "Datenelementen" finden
+		daten = root.find("ns:instance/ns:datarow", ns)
+
+		# Alle Elemente suchen und jeweils Inhalte ersetzen
+		for element in daten.findall("ns:element", ns):
+			elementID = element.get("id")
+
+			if elementID == "Vorblatt_vorname":
+				element.text = nutzerdaten["vorname"]
+			elif elementID == "Vorblatt_ort":
+				element.text = nutzerdaten["ort"]
+			elif elementID == "Vorblatt_strasse":
+				element.text = nutzerdaten["strasse"]
+			elif elementID == "Vorblatt_haus_nr":
+				element.text = nutzerdaten["hausnummer"]
+			elif elementID == "Vorblatt_plz_de":
+				element.text = nutzerdaten["plz"]
+			elif elementID == "Vorblatt_name_firma":
+				element.text = nutzerdaten["nachname"]
+			elif elementID == "Vorblatt_hza":
+				element.text = nutzerdaten["hauptzollamt"]
+			elif elementID == "Vorblatt_e_mail3":
+				element.text = nutzerdaten["email"]
+			elif elementID == "2075_ansprechpartner":
+				element.text = f"{nutzerdaten['vorname']} {nutzerdaten['nachname']}"
+			elif elementID == "2075_email":
+				element.text = nutzerdaten["email"]
+			elif elementID == "2075_telefon":
+				element.text = nutzerdaten["telefon"]
+			elif elementID == "2075_ort":
+				element.text = nutzerdaten["ort"]
+			elif elementID == "2075_email":
+				element.text = nutzerdaten["email"]
+			elif elementID == "2075_datum2":
+				element.text = datum
+			elif elementID == "versteuerung2":
+				element.text = menge.replace(".", ",")
+			elif elementID == "betrag2":
+				element.text = f"{9.44 * mengeB:.2f}".replace(".", ",")
+			elif elementID == "endsumme":
+				element.text = f"{9.44 * mengeB:.2f}".replace(".", ",")
+
+		steuerformularXML = ET.tostring(root, encoding="utf-8", method="xml")
+		response = HttpResponse(steuerformularXML, content_type="application/xml")
+		response["Content-Disposition"] = "attachment; filename=2075.xml"
+		return response
+
+	return redirect("brautagebuch")
