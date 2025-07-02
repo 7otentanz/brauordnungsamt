@@ -1,14 +1,15 @@
- {
-    "nachname": "Testnutzer",
-    "vorname": "Dieter",
-    "ort": "Ortshausen",
-    "strasse": "Straße",
-    "hausnummer": "21",
-    "plz": "12345",
-    "hauptzollamt": "Karlsruhe",
+{
+    "name": "Hauser",
+    "menge": 20,
+    "hauptzollamt": "Hauptzollamt Karlsruhe",
     "email": "t_hauser@web.de",
-    "telefon": "01575123123123",
-    "geburtstag": "12.12.2012",
-    "menge": 0,
-    "sundmenge": 20,
- }
+    "vorname": "Tim",
+    "ort": "Engelsbrand",
+    "strasse": "Hauptstrasse",
+    "hausnummer": "378",
+    "plz": "75331",
+    "telefon": "015752746727",
+    "geburtstag": "1993-02-09",
+    "sudmenge": 20,
+    "nachname": "Hauser"
+}

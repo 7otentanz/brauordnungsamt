@@ -87,34 +87,11 @@ def scrapeRezept(request):
 	from . import mmumscraper
 	if request.method == "POST":
 
-		# Rezept vom Scraper initialisieren lassen.
+		# Rezept vom Scraper initialisieren lassen...
 		url = request.POST.get("url")
 		rezept = mmumscraper.rezeptscrapen(url)
 
-		# auch hier initialisiertes Rezept in eine json speichern.
-		rezeptjson = os.path.join(static, "rezept.json")
-		with open(rezeptjson, "w", encoding="utf-8") as datei:
-			json.dump(rezept, datei, indent=4)
-
-		# auch hier ein nicht abgeschlossenes Protokoll anlegen.
-		jetzt = datetime.datetime.now()
-		heute = jetzt.strftime("%Y-%m-%d")
-		rezept["abgeschlossen"] = False
-		protokolljson = os.path.join(static, "protokolle", f"{heute}.json")
-		with open(protokolljson, "w", encoding="utf-8") as datei:
-			json.dump(rezept, datei, indent=4)
-
-		# # auch hier Heizen auf Einmaischtemperatur im Hintergrund starten, dass sofort weitergeleitet werden kann auf die Statusseite.
-		# def einmaischenStarten():
-		# 	from . import brausteuerung
-		# 	bierrezept = brausteuerung.Rezept(rezept["name"], rezept["schuettung"], rezept["maischplan"], rezept["kochzeit"], rezept["hopfengaben"], rezept["anstelltemperatur"], rezept["hefe"])
-		# 	brauhaus = brausteuerung.Brausteuerung()
-		# 	brauvorgang = brausteuerung.Brauvorgang(bierrezept, brauhaus)
-		# 	brauvorgang.einmaischenVorbereiten()
-		
-		# thread = threading.Thread(target=einmaischenStarten)
-		# thread.start()
-		
+		# ... und an das Template zurückgeben, dass es verarbeitet werden kann.
 		return render(request, 'app/rezeptscraped.html', {"rezept": rezept})
 
 
@@ -203,4 +180,38 @@ def kochenStarten(request):
 		thread = threading.Thread(target=wuerzekochen)
 		thread.start()
 		
+		# Menge gebrauten Biers aktualisieren
+		nutzerjson = os.path.join(static, "nutzer.json")
+		with open(nutzerjson, "r", encoding="utf-8") as datei:
+			nutzerdaten = json.load(datei)
+		nutzerdaten["menge"] = nutzerdaten["menge"] + nutzerdaten["sudmenge"]
+		with open(nutzerjson, "w", encoding="utf-8") as datei:
+			json.dump(nutzerdaten, datei, indent=4)
+
+		# Protokoll abschließen & Menge hinzufügen
+		jetzt = datetime.datetime.now()
+		heute = jetzt.strftime("%Y-%m-%d")
+		rezept["menge"] = nutzerdaten["sudmenge"]
+		rezept["abgeschlossen"] = True
+		protokolljson = os.path.join(static, "protokolle", f"{heute}.json")
+		with open(protokolljson, "w", encoding="utf-8") as datei:
+			json.dump(rezept, datei, indent=4)
+
 		return redirect("status")
+	
+
+#### BRAUTAGEBUCH ####
+
+def brautagebuch(request):
+
+	protokollordner = os.path.join(static, "protokolle")
+	alleProtokolle = []
+
+	for eineJson in os.listdir(protokollordner):
+		protokoll = os.path.join(protokollordner, eineJson)
+		with open(protokoll, "r", encoding="utf-8") as datei:
+			protokolldaten = json.load(datei)
+			datum = eineJson.split(".")[0]
+			alleProtokolle.append({datum: protokolldaten})
+
+	return render(request, "app/brautagebuch.html", {"alleProtokolle": alleProtokolle})
